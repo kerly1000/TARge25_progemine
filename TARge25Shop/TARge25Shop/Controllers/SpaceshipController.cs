@@ -4,7 +4,7 @@ namespace TARge25Shop.Controllers
 {
     public class SpaceshipController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Create()
         {
             return View();
         }
