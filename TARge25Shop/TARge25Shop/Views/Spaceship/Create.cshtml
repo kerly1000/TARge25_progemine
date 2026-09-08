@@ -1,7 +1,26 @@
 ﻿@model TARge25Shop.Models.Spaceship.SpaceshipCreateViewModel
 
 <div>
-    Spaceship Create
+    <a asp-action="create" asp-controller="spaceship" type="submit" class="btn-primary">Create</a>
+</div>
+
+<style>
+    .btn-primary {
+        display: inline-block;
+        background-color: #4A2C20;
+        color: #F3E6D0;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 15px;
+        border: 1px solid #4A2C20;
+        transition: all 0.2s ease;
+    }
+</style>
+
+<div>
+    <h1>Spaceships</h1>
 </div>
 <form method="post" enctype="multipart/form-data">
     <input asp-for="Id" type="hidden" />
