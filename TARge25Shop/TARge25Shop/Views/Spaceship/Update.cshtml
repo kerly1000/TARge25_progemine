@@ -1,7 +1,7 @@
 ﻿@model TARge25Shop.Models.Spaceship.SpaceshipCreateViewModel
 
 <div>
-    Spaceship Create
+    Spaceship Update
 </div>
 <form method="post" enctype="multipart/form-data">
     <input asp-for="Id" type="hidden" />
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <input asp-action="create" asp-controller="spaceship" type="submit" class="btn btn-primary" value="Create" />
+    <input asp-action="update" asp-controller="spaceship" type="submit" class="btn btn-primary" value="Update" />
     <a asp-action="Index" asp-controller="spaceship" class="btn btn-secondary">Back to List</a>
 
 </form>

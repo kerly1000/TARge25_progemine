@@ -1,5 +1,5 @@
 ﻿
-
+using Microsoft.EntityFrameworkCore;
 using TARge25Shop.Core.Domain;
 using TARge25Shop.Core.Dto;
 using TARge25Shop.Core.ServiceInterface;
@@ -43,6 +43,37 @@ namespace TARge25Shop.ApplicationServices.Services
 
             return spaceShip;
         }
+
+        //teha update meetod, mis võtab vastu dto ja uuendab olemasolevad kosmoselaeva
+        public async Task<Spaceship> Update(SpaceshipDto dto)
+        {   //vaheinstants dto ja domain vahel, et andmed liiguks suunal
+            //dto-domain
+            Spaceship spaceShip = new();
+
+            spaceShip.Id = dto.Id;
+            spaceShip.Name = dto.Name;
+            spaceShip.ShipType = dto.ShipType;
+            spaceShip.Crew = dto.Crew;
+            spaceShip.EnginePower = dto.EnginePower;
+            spaceShip.CreatedAt = dto.CreatedAt;
+            spaceShip.UpdatedAt = DateTime.Now;
+
+            //andmete uuendamine andmebaasis
+            _context.Spaceships.Update(spaceShip);
+            await _context.SaveChangesAsync();
+
+
+            return spaceShip;
+        }
+
+        public async Task<Spaceship> DetailAsync(Guid id)
+        {
+            var spaceship = await _context.Spaceships
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            return spaceship;
+        }
+
     }
 
 }
