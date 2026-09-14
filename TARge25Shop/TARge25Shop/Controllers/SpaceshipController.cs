@@ -71,6 +71,8 @@ namespace TARge25Shop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+
         public async Task<IActionResult> Update(Guid id)
         {
             var spaceship = await _spaceshipServices.DetailAsync(id);
@@ -86,8 +88,38 @@ namespace TARge25Shop.Controllers
                 Name = spaceship.Name,
                 ShipType = spaceship.ShipType,
                 Crew = spaceship.Crew,
-                EnginePower = spaceship.EnginePower
+                EnginePower = spaceship.EnginePower,
+                CreatedAt = spaceship.CreatedAt,
+                UpdatedAt = spaceship.UpdatedAt
             };
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(SpaceshipUpdateViewModel vm)
+        {
+            var dto = new SpaceshipDto()
+            {
+                Id = vm.Id,
+                Name = vm.Name,
+                ShipType = vm.ShipType,
+                Crew = vm.Crew,
+                EnginePower = vm.EnginePower,
+                CreatedAt = vm.CreatedAt,
+                UpdatedAt = vm.UpdatedAt
+            };
+
+            var result = await _spaceshipServices.Update(dto);
+            if (result == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            return View();
         }
     }
 
