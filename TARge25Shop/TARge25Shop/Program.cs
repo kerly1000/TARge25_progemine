@@ -15,6 +15,7 @@ namespace TARge25Shop
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<ISpaceshipServices, SpaceshipServices>();
+            builder.Services.AddScoped<IFileServices, FileServices>();
 
             builder.Services.AddDbContext<TARge25ShopContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

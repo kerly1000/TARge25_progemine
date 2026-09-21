@@ -12,13 +12,17 @@ namespace TARge25Shop.ApplicationServices.Services
     {
 
         private readonly TARge25ShopContext _context;
+        private readonly IFileServices _fileServices;
 
         public SpaceshipServices
             (
-                TARge25ShopContext context
+                TARge25ShopContext context,
+                IFileServices fileServices
+
             )
         {
             _context = context;
+            _fileServices = fileServices;
         }
 
         //meetod tuleb controllerid esile kutsuda, st vaja liidestada
@@ -28,13 +32,17 @@ namespace TARge25Shop.ApplicationServices.Services
             //dto-domain
             Spaceship spaceShip = new();
             
-                spaceShip.Id = Guid.NewGuid();
-                spaceShip.Name = dto.Name;
-                spaceShip.ShipType = dto.ShipType;
-                spaceShip.Crew = dto.Crew;
-                spaceShip.EnginePower = dto.EnginePower;
-                spaceShip.CreatedAt = DateTime.Now;
-                spaceShip.UpdatedAt = DateTime.Now;
+            spaceShip.Id = Guid.NewGuid();
+            spaceShip.Name = dto.Name;
+            spaceShip.ShipType = dto.ShipType;
+            spaceShip.Crew = dto.Crew;
+            spaceShip.EnginePower = dto.EnginePower;
+            spaceShip.CreatedAt = DateTime.Now;
+            spaceShip.UpdatedAt = DateTime.Now;
+            //kui uus ankeet on loodud, siis toimub ka faili salvestamine
+            //saab kutsuda teise service classi meetodit
+            _fileServices.FilesToApi(dto, spaceShip);
+
 
             //andmete salvestamine andmebaasi
             _context.Spaceships.Add(spaceShip);
@@ -50,7 +58,7 @@ namespace TARge25Shop.ApplicationServices.Services
             //dto-domain
             Spaceship spaceShip = new();
 
-            spaceShip.Id = dto.Id;
+            spaceShip.Id = (Guid)dto.Id;
             spaceShip.Name = dto.Name;
             spaceShip.ShipType = dto.ShipType;
             spaceShip.Crew = dto.Crew;
