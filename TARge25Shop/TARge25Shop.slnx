@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="TARge25Shop.SpaceshipTest/TARge25Shop.SpaceshipTest.csproj" Id="db4cd464-15c7-4718-9d04-dd7004aa2a8d" />
   <Project Path="TARge25Shop/TARge25Shop.csproj" />
   <Project Path="TARge25ShopApplicationServices/TARge25Shop.ApplicationServices.csproj" Id="2dcc28c6-8c14-4dcb-abc8-0b096c5870e2" />
   <Project Path="TARge25ShopCore/TARge25Shop.Core.csproj" Id="24d49806-9dbe-4123-b49a-8aa461ea9891" />
