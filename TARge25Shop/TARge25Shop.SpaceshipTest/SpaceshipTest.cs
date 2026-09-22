@@ -52,5 +52,65 @@ namespace TARge25Shop.SpaceshipTest
             Assert.NotEqual(wrongGuid, goodGuid);
 
         }
+
+
+        //Seleta kodus lahti, nagu eelnevate testide laused eesti keelde. 
+        [Fact]
+
+        public async Task Should_GetSpaceshipById_WhenGuidIsequal()
+        {
+            // ülesseade
+            Guid databaseGuid = Guid.Parse("3dd49e7f-7721-4673-9b6a-db11ecb36919");
+            Guid seekGuid = Guid.Parse("3dd49e7f-7721-4673-9b6a-db11ecb36919");
+
+            //tegevus
+            await Svc<ISpaceshipServices>().DetailAsync(seekGuid);
+
+            //assert
+            Assert.Equal(databaseGuid, seekGuid);
+        }
+
+        [Fact]
+
+        public async Task Should_DeleteSpaceshipById_WhenReturnedResultIsEqual()
+        {
+            //ülesseade
+            SpaceshipDto dto = MockSpaceshipData();
+
+            //tegevus
+            var addSpaceship = await Svc<ISpaceshipServices>().Create(dto);
+            var deleteSpaceship = await Svc<ISpaceshipServices>().Delete(addSpaceship.Id);
+
+            //kontroll
+            Assert.Equal(addSpaceship.Id, deleteSpaceship.Id);
+        }
+
+        private SpaceshipDto MockSpaceshipData(bool isOneOrTwo = false)
+        {
+            if (isOneOrTwo == false)
+            {
+                return new SpaceshipDto
+                {
+                    Name = "X Space",
+                    ShipType = "rakett",
+                    Crew = 2,
+                    EnginePower = 12,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+            }
+            else
+            {
+                return new SpaceshipDto
+                {
+                    Name = "Fallen Eagle",
+                    ShipType = "droon",
+                    Crew = 22,
+                    EnginePower = 369,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+            }
+        }
     }
 }
