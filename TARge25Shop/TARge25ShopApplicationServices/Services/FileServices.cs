@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -62,6 +63,27 @@ namespace TARge25Shop.ApplicationServices.Services
                     }
                 }
             }
+        }
+        public async Task<FileToApi> RemoveImageFromApi(FileToApiDto dto)
+        {
+            //kui soovin kustutada faili, siis pean läbi Id pildi üles otsima
+            var imageId = await _context.FileToApis
+                .FirstOrDefaultAsync(x => x.Id == dto.Id);
+
+            //teha muutuja filePath, mis näitab failide asukohta
+            var filePath = _webHost.ContentRootPath + "\\wwwroot\\multipleFileUpLoad\\"
+                + imageId.ExistingFilePath;
+
+            //kui fail asub sellises kaustas, siis kustuta
+            if(File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            _context.FileToApis.Remove(imageId);
+            await _context.SaveChangesAsync();
+
+            return null;
         }
     }
 }
