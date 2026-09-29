@@ -43,8 +43,17 @@ namespace TARge25Shop.ApplicationServices.Services
             //saab kutsuda teise service classi meetodit
             _fileServices.FilesToApi(dto, spaceShip);
 
+            if (spaceShip.Crew  < 4)
+            {
+                spaceShip.Crew = 4;
+            }
 
-            //andmete salvestamine andmebaasi
+            if (spaceShip.EnginePower < 0)
+            {
+                spaceShip.EnginePower = 1;
+            }
+
+           //andmete salvestamine andmebaasi
             _context.Spaceships.Add(spaceShip);
             await _context.SaveChangesAsync();
 
@@ -58,7 +67,7 @@ namespace TARge25Shop.ApplicationServices.Services
             //dto-domain
             Spaceship spaceShip = new();
 
-            spaceShip.Id = (Guid)dto.Id;
+            spaceShip.Id = dto.Id;
             spaceShip.Name = dto.Name;
             spaceShip.ShipType = dto.ShipType;
             spaceShip.Crew = dto.Crew;
@@ -73,6 +82,7 @@ namespace TARge25Shop.ApplicationServices.Services
 
             return spaceShip;
         }
+
 
         public async Task<Spaceship> DetailAsync(Guid id)
         {
