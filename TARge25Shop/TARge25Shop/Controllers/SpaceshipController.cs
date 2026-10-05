@@ -154,7 +154,7 @@ namespace TARge25Shop.Controllers
             vm.EnginePower = spaceship.EnginePower;
             vm.CreatedAt = spaceship.CreatedAt;
             vm.UpdatedAt = spaceship.UpdatedAt;
-            vm.Image.AddRange(Image);
+            //vm.Image.AddRange(Image);
 
             return View(vm);
         }

@@ -76,25 +76,25 @@ namespace TARge25Shop.ApplicationServices.Services
                 return kinderGarten;
             }
 
-            public async Task<Kindergarten> DetailAsync(Guid id)
-            {
-                var kindergarten = await _context.Kindergartens
-                    .FirstOrDefaultAsync(x => x.Id == id);
+            //public async Task<Kindergarten> DetailAsync(Guid id)
+            //{
+            //    var kindergarten = await _context.Kindergartens
+            //        .FirstOrDefaultAsync(x => x.Id == id);
 
-                return kindergarten;
+            //    return kindergarten;
 
-            }
+            //}
 
-            public async Task<Kindergarten> Delete(Guid id)
-            {
-                var result = await _context.Kindergartens
-                    .FirstOrDefaultAsync(x => x.Id == id);
+            //public async Task<Kindergarten> Delete(Guid id)
+            //{
+            //    var result = await _context.Kindergartens
+            //        .FirstOrDefaultAsync(x => x.Id == id);
 
-                _context.Kindergartens.Remove(result);
-                await _context.SaveChangesAsync();
+            //    _context.Kindergartens.Remove(result);
+            //    await _context.SaveChangesAsync();
 
-                return result;
-            }
+            //    return result;
+            //}
 
         
     }
