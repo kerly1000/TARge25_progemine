@@ -10,7 +10,8 @@ namespace TARge25Shop.Core.ServiceInterface
     {
         void FilesToApi(SpaceshipDto dto, Spaceship domain);
         
-            
+        
+           
         
     }
 }
