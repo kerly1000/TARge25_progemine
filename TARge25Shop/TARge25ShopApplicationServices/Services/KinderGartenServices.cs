@@ -32,13 +32,13 @@ namespace TARge25Shop.ApplicationServices.Services
             kinderGarten.TeacherName = dto.TeacherName;
             kinderGarten.CreatedAt = DateTime.Now;
             kinderGarten.UpdatedAt = DateTime.Now;
-        }
+
             if (dto.Files != null)
             {
-                _fileServices.UploadFilesToDatabase(dto, kinderGarten);
+                _fileServices.UploadKinderGartenFilesToDatabase(dto, kinderGarten);
             }
 
-            _context.KinderGartens.Add(kinderGarten);
+            await _context.KinderGartens.AddAsync(kinderGarten);
             await _context.SaveChangesAsync();
 
             return kinderGarten;

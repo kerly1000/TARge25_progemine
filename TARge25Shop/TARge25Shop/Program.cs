@@ -17,6 +17,7 @@ namespace TARge25Shop
             builder.Services.AddScoped<ISpaceshipServices, SpaceshipServices>();
             builder.Services.AddScoped<IFileServices, FileServices>();
             builder.Services.AddScoped<IRealEstateServices, RealEstateServices>();
+            builder.Services.AddScoped<IKinderGartenServices, KinderGartenServices>();
 
             //on vaja alla laadida Microsoft.EntityFrameworkCore.SqlServer NuGet pakett,
             //et kasutada UseSqlServer meetodit
