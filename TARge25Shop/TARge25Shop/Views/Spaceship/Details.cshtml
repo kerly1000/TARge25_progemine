@@ -1,4 +1,4 @@
-﻿@model TARge25Shop.Models.Spaceship.SpaceshipDetailsViewModel
+﻿﻿@model TARge25Shop.Models.Spaceship.SpaceshipDetailsViewModel
 
 <h1>Details</h1>
 
@@ -54,10 +54,13 @@
         </div>
     </dl>
 
-    @foreach (var images in Model.Images)
-    {
-        <partial name="_Images" model="images" />
-    }
+    <dl>
+        @foreach (var images in Model.Image)
+        {
+            <partial name="_Images" model="images" />
+        }
+    </dl>
+    <hr />
 
     <a asp-action="Index" asp-controller="spaceship" class="btn btn-success">Back</a>
 </div>
