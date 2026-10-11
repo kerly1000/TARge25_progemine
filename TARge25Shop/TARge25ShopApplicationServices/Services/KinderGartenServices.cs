@@ -28,7 +28,7 @@ namespace TARge25Shop.ApplicationServices.Services
             kinderGarten.Id = Guid.NewGuid();
             kinderGarten.GroupName = dto.GroupName;
             kinderGarten.ChildrenCount = dto.ChildrenCount;
-            kinderGarten.KindergartenName = dto.KindergartenName;
+            kinderGarten.KinderGartenName = dto.KinderGartenName;
             kinderGarten.TeacherName = dto.TeacherName;
             kinderGarten.CreatedAt = DateTime.Now;
             kinderGarten.UpdatedAt = DateTime.Now;
@@ -51,7 +51,7 @@ namespace TARge25Shop.ApplicationServices.Services
             kinderGarten.Id = Guid.NewGuid();
             kinderGarten.GroupName = dto.GroupName;
             kinderGarten.ChildrenCount = dto.ChildrenCount;
-            kinderGarten.KindergartenName = dto.KindergartenName;
+            kinderGarten.KinderGartenName = dto.KinderGartenName;
             kinderGarten.TeacherName = dto.TeacherName;
             kinderGarten.CreatedAt = DateTime.Now;
             kinderGarten.UpdatedAt = DateTime.Now;
