@@ -58,7 +58,7 @@ namespace TARge25Shop.ApplicationServices.Services
 
     if (dto.Files != null)
             {
-                _fileServices.UploadFilesToDatabase(dto, kinderGarten);
+                _fileServices.UploadKinderGartenFilesToDatabase(dto, kinderGarten);
             }
 
             _context.KinderGartens.Update(kinderGarten);
