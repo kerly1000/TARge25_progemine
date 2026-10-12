@@ -1,16 +1,14 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TARge25Shop.Core.Domain;
 using TARge25Shop.Core.Dto;
 using TARge25Shop.Core.ServiceInterface;
 using TARge25Shop.Data;
 
+
 namespace TARge25Shop.ApplicationServices.Services
 {
     public class SpaceshipServices : ISpaceshipServices
-
     {
-
         private readonly TARge25ShopContext _context;
         private readonly IFileServices _fileServices;
 
@@ -18,20 +16,20 @@ namespace TARge25Shop.ApplicationServices.Services
             (
                 TARge25ShopContext context,
                 IFileServices fileServices
-
             )
         {
             _context = context;
             _fileServices = fileServices;
         }
 
-        //meetod tuleb controllerid esile kutsuda, st vaja liidestada
-
+        //see meetod on vaja controlleris esile kutsuda
+        //peab lisama interface, et kutsuda see meetod välja
         public async Task<Spaceship> Create(SpaceshipDto dto)
-        {   //vaheinstants dto ja domain vahel, et andmed liiguks suunal
-            //dto-domain
+        {
+            //siin peab tegema vaheinstansi dto ja domain vahel,
+            //et andmed liiguvad dto-st domain objekt
             Spaceship spaceShip = new();
-            
+
             spaceShip.Id = Guid.NewGuid();
             spaceShip.Name = dto.Name;
             spaceShip.ShipType = dto.ShipType;
@@ -39,32 +37,34 @@ namespace TARge25Shop.ApplicationServices.Services
             spaceShip.EnginePower = dto.EnginePower;
             spaceShip.CreatedAt = DateTime.Now;
             spaceShip.UpdatedAt = DateTime.Now;
-            //kui uus ankeet on loodud, siis toimub ka faili salvestamine
-            //saab kutsuda teise service classi meetodit
-            _fileServices.FilesToApi(dto, spaceShip);
+            //kui uus ankeet on loodud, siis
+            //toimub ka faili salvestamine
+            //saab kutsuda teise service classi meetotit
+            //esile service classis
 
-            if (spaceShip.Crew  < 4)
+            if (spaceShip.Crew < 4)
             {
                 spaceShip.Crew = 4;
             }
 
+            _fileServices.FilesToApi(dto, spaceShip);
             if (spaceShip.EnginePower < 0)
             {
                 spaceShip.EnginePower = 1;
             }
 
-           //andmete salvestamine andmebaasi
+            //andmete salvestamine andmebaasi
             _context.Spaceships.Add(spaceShip);
             await _context.SaveChangesAsync();
-
 
             return spaceShip;
         }
 
-        //teha update meetod, mis võtab vastu dto ja uuendab olemasolevad kosmoselaeva
+        //teha update meetod, mis võtab vastu dto ja uuendab olemasolevat kosmoselaeva
         public async Task<Spaceship> Update(SpaceshipDto dto)
-        {   //vaheinstants dto ja domain vahel, et andmed liiguks suunal
-            //dto-domain
+        {
+            //siin peab tegema vaheinstansi dto ja domain vahel,
+            //et andmed liiguvad dto-st domain objekt
             Spaceship spaceShip = new();
 
             spaceShip.Id = dto.Id;
@@ -72,17 +72,16 @@ namespace TARge25Shop.ApplicationServices.Services
             spaceShip.ShipType = dto.ShipType;
             spaceShip.Crew = dto.Crew;
             spaceShip.EnginePower = dto.EnginePower;
-            spaceShip.CreatedAt = dto.CreatedAt;
+            spaceShip.CreatedAt = (DateTime)dto.CreatedAt;
             spaceShip.UpdatedAt = DateTime.Now;
 
             //andmete uuendamine andmebaasis
+            _context.ChangeTracker.Clear();
             _context.Spaceships.Update(spaceShip);
             await _context.SaveChangesAsync();
 
-
             return spaceShip;
         }
-
 
         public async Task<Spaceship> DetailAsync(Guid id)
         {
@@ -90,7 +89,6 @@ namespace TARge25Shop.ApplicationServices.Services
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return spaceship;
-
         }
 
         public async Task<Spaceship> Delete(Guid id)
@@ -103,7 +101,5 @@ namespace TARge25Shop.ApplicationServices.Services
 
             return result;
         }
-
     }
-
 }
