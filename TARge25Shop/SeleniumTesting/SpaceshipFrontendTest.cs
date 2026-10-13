@@ -224,6 +224,47 @@ namespace TARge25Shop.SeleniumTesting
             Assert.True(rowCount < 2);
         }
 
+        [Fact]
+        [Order(5)] 
+        public void Should_NavigateToCreate_AddSpaceShip_WithCorrectData_ReturnToIndex_Proper()
+        {
+            //ülesseade
+            IWebDriver driver = SetupAndNavigateSIndex();
+
+            //tegevus
+            IWebElement createInIndex = driver.FindElement(By.Id("CreateInIndex"));
+            createInIndex.Click();
+
+            //sisestatavad andmed
+            string concreteName = InsertSpaceShipData_ReturnName(driver, false);
+
+            IWebElement cu_CreateSpaceship = driver.FindElement(By.Id("CU_CreateSpaceship"));
+            cu_CreateSpaceship.Click();
+
+            //arvuti tudub
+            Thread.Sleep(1000);
+
+            //andmete kogumine pärast reloadi
+            IWebElement indexNameSpaceship = driver.FindElement(By.Id("IndexNameSpaceship"));
+            var spaceShipNameData = indexNameSpaceship.Text;
+            IWebElement indexTypeSpaceship = driver.FindElement(By.Id("IndexTypeSpaceship"));
+            var spaceShipTypeData = indexTypeSpaceship.Text;
+            IWebElement indexCrewSpaceship = driver.FindElement(By.Id("IndexCrewSpaceship"));
+            var spaceShipCrewData = indexCrewSpaceship.Text;
+            bool doesItExist = false;
+
+            //otsi kõik read,
+            var table = driver.FindElement(By.Id("IndexTable"));
+            List<IWebElement>
+
+            //kontroll
+            //Assert.true(concreteName == indexNameSpaceship.Text)
+            Assert.True(true == doesItExist);
+            Assert.Equal(spaceShipNameData, "i add name for spaceship");
+            Assert.True(spaceShipTypeData == "i add ship type for spaceship");
+            Assert.Equal(spaceShipCrewData, "12345");
+        }
+
         private static IWebDriver SetupAndNavigateSIndex()
         {
             //firefoxi käskiv ja juhtiv draiver
@@ -271,6 +312,44 @@ namespace TARge25Shop.SeleniumTesting
                 cu_EnginePowerEntrySpaceship.SendKeys("666667");
             }
 
+         
+        }
+
+
+        private string InsertSpaceShipData_ReturnName(IWebDriver driver, bool isOneOrTwo = false)
+        {
+            Guid returnGuid = Guid.NewGuid();
+            if (isOneOrTwo)
+            {
+                IWebElement cu_NameEntrySpaceship = driver.FindElement(By.Id("CU_NameEntrySpaceship"));
+                cu_NameEntrySpaceship.Clear();
+                cu_NameEntrySpaceship.SendKeys(returnGuid.ToString());
+                IWebElement cu_ShipTypeEntrySpaceship = driver.FindElement(By.Id("CU_ShipTypeEntrySpaceship"));
+                cu_ShipTypeEntrySpaceship.Clear();
+                cu_ShipTypeEntrySpaceship.SendKeys("midagi ei saa aru");
+                IWebElement cu_CrewEntrySpaceship = driver.FindElement(By.Id("CU_CrewEntrySpaceship"));
+                cu_CrewEntrySpaceship.Clear();
+                cu_CrewEntrySpaceship.SendKeys("54321");
+                IWebElement cu_EnginePowerEntrySpaceship = driver.FindElement(By.Id("CU_EnginePowerEntrySpaceship"));
+                cu_EnginePowerEntrySpaceship.Clear();
+                cu_EnginePowerEntrySpaceship.SendKeys("555666");
+            }
+            else
+            {
+                IWebElement cu_NameEntrySpaceship = driver.FindElement(By.Id("CU_NameEntrySpaceship"));
+                cu_NameEntrySpaceship.Clear();
+                cu_NameEntrySpaceship.SendKeys(returnGuid.ToString());
+                IWebElement cu_ShipTypeEntrySpaceship = driver.FindElement(By.Id("CU_ShipTypeEntrySpaceship"));
+                cu_ShipTypeEntrySpaceship.Clear();
+                cu_ShipTypeEntrySpaceship.SendKeys("i add ship type for spaceship");
+                IWebElement cu_CrewEntrySpaceship = driver.FindElement(By.Id("CU_CrewEntrySpaceship"));
+                cu_CrewEntrySpaceship.Clear();
+                cu_CrewEntrySpaceship.SendKeys("12345");
+                IWebElement cu_EnginePowerEntrySpaceship = driver.FindElement(By.Id("CU_EnginePowerEntrySpaceship"));
+                cu_EnginePowerEntrySpaceship.Clear();
+                cu_EnginePowerEntrySpaceship.SendKeys("666667");
+            }
+            return returnGuid.ToString();
          
         }
     }
