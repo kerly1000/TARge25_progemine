@@ -21,7 +21,7 @@ namespace TARge25Shop.SeleniumTesting
             createInIndex.Click();
 
             //sisestatavad andmed
-            InsertSpaceShipData(driver);
+            InsertSpaceShipData(driver, false);
 
             IWebElement cu_CreateSpaceship = driver.FindElement(By.Id("CU_CreateSpaceship"));
             cu_CreateSpaceship.Click();
@@ -44,7 +44,7 @@ namespace TARge25Shop.SeleniumTesting
         }
 
         [Fact]
-        public void Should_NavigateToDetails_OfASpaceShip_WithPreviouslyCorrectData_AndReturnToIndex()
+        public void Should_NavigateToDetails_OfASpaceShip_WithPreviouslyCorrectData()
         {
             //ülesseade
             IWebDriver driver = SetupAndNavigateSIndex();
@@ -62,8 +62,7 @@ namespace TARge25Shop.SeleniumTesting
                 var locatedelement = row.FindElement(By.Id("IndexNameSpaceship"));
                 if (locatedelement.Text == "i add name for spaceship")
                 {
-                    //        //siis vajuta selles reas asuvat details nuppu
-                    //        row.FindElement(By.Id("IndexSpaceshipDetails")).Click();
+                    //siis vajuta selles reas asuvat details nuppu
                     var rowelement = row.FindElement(By.Id("IndexActionsSpaceship"));
                     var button = rowelement.FindElement(By.Id("IndexSpaceshipDetails"));
                     button.Click();
@@ -99,7 +98,8 @@ namespace TARge25Shop.SeleniumTesting
         }
 
         [Fact]
-        public void Should_UpdateDetails_OfASpaceship_WithNewData()
+        public void Should_UpdateDetails_OfASpaceShip_WithNewData()
+
         {
             //ülesseade
             IWebDriver driver = SetupAndNavigateSIndex();
@@ -117,10 +117,9 @@ namespace TARge25Shop.SeleniumTesting
                 var locatedelement = row.FindElement(By.Id("IndexNameSpaceship"));
                 if (locatedelement.Text == "i add name for spaceship")
                 {
-                    //        //siis vajuta selles reas asuvat details nuppu
-                    //        row.FindElement(By.Id("IndexSpaceshipDetails")).Click();
+                    //siis vajuta selles reas asuvat details nuppu
                     var rowelement = row.FindElement(By.Id("IndexActionsSpaceship"));
-                    var button = rowelement.FindElement(By.Id("IndexSpaceshipDetails"));
+                    var button = rowelement.FindElement(By.Id("IndexSpaceshipUpdate"));
                     button.Click();
                     //pärast õiget vajutust, tsükkel katkestatakse
                     //arvuti tudub
@@ -131,20 +130,19 @@ namespace TARge25Shop.SeleniumTesting
             //sisestatavad andmed
             InsertSpaceShipData(driver, true);
 
-            IWebElement cu_CreateSpaceship = driver.FindElement(By.Id("CU_CreateSpaceship"));
+            IWebElement cu_CreateSpaceship = driver.FindElement(By.Id("CU_UpdateSpaceship"));
             cu_CreateSpaceship.Click();
 
-            //puhkab
+            //arvuti tudub
             Thread.Sleep(1000);
         }
 
-
-private static IWebDriver SetupAndNavigateSIndex()
+        private static IWebDriver SetupAndNavigateSIndex()
         {
             //firefoxi käskiv ja juhtiv draiver
             IWebDriver driver = new FirefoxDriver();
             //aadress millele draiver navigeerib
-            driver.Url = "https://localhost:7227/";
+            driver.Url = "https://localhost:7085/";
             //lehelt otsitav element
             IWebElement navigateToSpaceship = driver.FindElement(By.LinkText("Spaceship"));
             //selle elemendiga tehtav tegevus
@@ -153,20 +151,40 @@ private static IWebDriver SetupAndNavigateSIndex()
         }
 
 
-        private void InsertSpaceShipData(IWebDriver driver)
+        private void InsertSpaceShipData(IWebDriver driver, bool isOneOrTwo = false)
         {
-            IWebElement cu_NameEntrySpaceship = driver.FindElement(By.Id("CU_NameEntrySpaceship"));
-            cu_NameEntrySpaceship.Clear();
-            cu_NameEntrySpaceship.SendKeys("i add name for spaceship");
-            IWebElement cu_ShipTypeEntrySpaceship = driver.FindElement(By.Id("CU_ShipTypeEntrySpaceship"));
-            cu_ShipTypeEntrySpaceship.Clear();
-            cu_ShipTypeEntrySpaceship.SendKeys("i add ship type for spaceship");
-            IWebElement cu_CrewEntrySpaceship = driver.FindElement(By.Id("CU_CrewEntrySpaceship"));
-            cu_CrewEntrySpaceship.Clear();
-            cu_CrewEntrySpaceship.SendKeys("12345");
-            IWebElement cu_EnginePowerEntrySpaceship = driver.FindElement(By.Id("CU_EnginePowerEntrySpaceship"));
-            cu_EnginePowerEntrySpaceship.Clear();
-            cu_EnginePowerEntrySpaceship.SendKeys("666667");
+            if (isOneOrTwo)
+            {
+                IWebElement cu_NameEntrySpaceship = driver.FindElement(By.Id("CU_NameEntrySpaceship"));
+                cu_NameEntrySpaceship.Clear();
+                cu_NameEntrySpaceship.SendKeys("just a spaceship");
+                IWebElement cu_ShipTypeEntrySpaceship = driver.FindElement(By.Id("CU_ShipTypeEntrySpaceship"));
+                cu_ShipTypeEntrySpaceship.Clear();
+                cu_ShipTypeEntrySpaceship.SendKeys("midagi ei saa aru");
+                IWebElement cu_CrewEntrySpaceship = driver.FindElement(By.Id("CU_CrewEntrySpaceship"));
+                cu_CrewEntrySpaceship.Clear();
+                cu_CrewEntrySpaceship.SendKeys("54321");
+                IWebElement cu_EnginePowerEntrySpaceship = driver.FindElement(By.Id("CU_EnginePowerEntrySpaceship"));
+                cu_EnginePowerEntrySpaceship.Clear();
+                cu_EnginePowerEntrySpaceship.SendKeys("555666");
+            }
+            else
+            {
+                IWebElement cu_NameEntrySpaceship = driver.FindElement(By.Id("CU_NameEntrySpaceship"));
+                cu_NameEntrySpaceship.Clear();
+                cu_NameEntrySpaceship.SendKeys("i add name for spaceship");
+                IWebElement cu_ShipTypeEntrySpaceship = driver.FindElement(By.Id("CU_ShipTypeEntrySpaceship"));
+                cu_ShipTypeEntrySpaceship.Clear();
+                cu_ShipTypeEntrySpaceship.SendKeys("i add ship type for spaceship");
+                IWebElement cu_CrewEntrySpaceship = driver.FindElement(By.Id("CU_CrewEntrySpaceship"));
+                cu_CrewEntrySpaceship.Clear();
+                cu_CrewEntrySpaceship.SendKeys("12345");
+                IWebElement cu_EnginePowerEntrySpaceship = driver.FindElement(By.Id("CU_EnginePowerEntrySpaceship"));
+                cu_EnginePowerEntrySpaceship.Clear();
+                cu_EnginePowerEntrySpaceship.SendKeys("666667");
+            }
+
+         
         }
     }
 }
