@@ -137,6 +137,43 @@ namespace TARge25Shop.SeleniumTesting
             Thread.Sleep(1000);
         }
 
+        [Fact]
+        public void Should_DeleteSpaceship_FromAppVIADeleteView()
+        {
+            //ülesseade
+            IWebDriver driver = SetupAndNavigateSIndex();
+
+            //otsime üles kõik tabeli read, rida htmli tabelis tähistatakse "tr"iga
+            //ICollection<IWebElement> table = driver.FindElements(By.TagName("tr"));
+            var table = driver.FindElement(By.Id("IndexTable"));
+            List<IWebElement> rows = table.FindElements(By.TagName("tr")).ToList();
+            rows.RemoveAt(0);
+            //tsükkel käib kõik read läbi
+
+            foreach (var row in rows)
+            {
+
+                var locatedelement = row.FindElement(By.Id("IndexNameSpaceship"));
+                if (locatedelement.Text == "just a spaceship")
+                {
+                    //siis vajuta selles reas asuvat details nuppu
+                    var rowelement = row.FindElement(By.Id("IndexActionsSpaceship"));
+                    var button = rowelement.FindElement(By.Id("IndexSpaceshipDetails"));
+                    button.Click();
+                    //pärast õiget vajutust, tsükkel katkestatakse
+                    //arvuti tudub
+                    Thread.Sleep(500);
+                    break;
+                }
+            }
+
+            var clickthisbutton = driver.FindElement(By.Id("Delete_Delete"));
+            clickthisbutton.Click();
+
+            int rowCount = table.FindElements(By.TagName("tr")).ToList().Count();
+            Assert.True(rowCount < 2);
+        }
+
         private static IWebDriver SetupAndNavigateSIndex()
         {
             //firefoxi käskiv ja juhtiv draiver
