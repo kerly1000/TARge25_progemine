@@ -1,50 +1,14 @@
-﻿@model TARge25Shop.Models.ChuckNorris.ChuckNorrisViewModel
-@{
-    ViewData["Title"] = "Everyday of Chuck Norris";
-}
-
-//Tuleb teha vaade, kus on kõik vm muutujad välja toodud
-
-<div class="container">
-    <h1>Everyday of Chuck Norris</h1>
-    <form asp-controller="ChuckNorris" asp-action="Joke" method="get">
-        <button type="submit" class="btn btn-primary">
-            Get a Joke
-        </button>
+﻿﻿<div class="container">
+    <form method="get">
+        <div class="container">
+            <div class="form-group col-md-offset-3 col-md-5">
+                <h2>Welcome to Chuck Norris joke site</h2>
+            </div>
+        </div>
+        <div class="container">
+            <div class="form-group col-md-offset-3 col-md-5">
+                <button asp-controller="chuckNorris" asp-action="joke" class="btn btn-primary">Chuck Norris joke</button>
+            </div>
+        </div>
     </form>
-    <dl>
-        <div class="form-group row">
-            <label asp-for="CreatedAt class=" col-sm-2 col-form-label></label>
-            @Html.DisplayFor(model => @model.CreatedAt)
-        </div>
-
-        <div class="form-group row">
-            <label asp-for="IconUrl class="col-sm-2 col-form-label></label>
-            @Html.DisplayFor(model => @model.IconUrl)
-        </div>
-
-        <div class="form-group row">
-        <label asp-for="Id class=" col-sm-2 col-form-label></label>
-        @Html.DisplayFor(model => @model.Id)
-        </div>
-
-        <div class="form-group row">
-        <label asp-for="UpdatedAt class=" col-sm-2 col-form-label></label>
-        @Html.DisplayFor(model => @model.UpdatedAt)
-        </div>
-
-        <div class="form-group row">
-            <label asp-for="Url class=" col-sm-2 col-form-label></label>
-            @Html.DisplayFor(model => @model.Url)
-        </div>
-
-        <div class="form-group row">
-            <label asp-for="Value class=" col-sm-2 col-form-label></label>
-            @Html.DisplayFor(model => @model.Value)
-        </div>
-
-
-    </dl>
-
-    
 </div>
