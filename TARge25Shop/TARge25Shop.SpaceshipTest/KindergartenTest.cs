@@ -1,30 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 using TARge25Shop.Core.Dto;
 using TARge25Shop.Core.ServiceInterface;
 using Xunit;
 
 namespace TARge25Shop.SpaceshipTest
 {
-    public class SpaceshipTest15 : TestBase
+    public class KindergartenTest : TestBase
     {
         [Fact] //1
-        public async Task Should_AddSpaceShip_WhenResultIsReturned()
+        public async Task Should_AddKindergarten_WhenResultIsReturned()
         {
             // Ülesseade
-            SpaceshipDto dto = new SpaceshipDto()
+            KindergartenDto dto = new KindergartenDto()
             {
-                Name = "X AE a L 12 menuornvöerv",
-                ShipType = "lendav taldrik",
-                Crew = 67,
-                EnginePower = 69,//hobujõudu siis
+                GroupName = "munakesed",
+                ChildrenCount = 12,
+                KindergartenName = "tibukene",
+                TeacherName = "kana",
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
             };
 
             // tegutsemine
-            var result = await Svc<ISpaceshipServices>().Create(dto);
+            var result = await Svc<IKindergartenServices>().Create(dto);
 
             // kontroll
             Assert.NotNull(result);

@@ -32,6 +32,7 @@ namespace TARge25Shop.SpaceshipTest
         public virtual void SetupServices(ServiceCollection services)
         {
             services.AddScoped<ISpaceshipServices, SpaceshipServices>();
+            services.AddScoped<IKindergartenServices, IKindergartenServices>();
             services.AddScoped<IFileServices, FileServices>();
             services.AddScoped<IHostEnvironment, MockIHostEnvironment>();
 

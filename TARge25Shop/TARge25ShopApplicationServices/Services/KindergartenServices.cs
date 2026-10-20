@@ -1,101 +1,122 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.EntityFrameworkCore;
+
 using TARge25Shop.Core.Domain;
 using TARge25Shop.Core.Dto;
 using TARge25Shop.Core.ServiceInterface;
 using TARge25Shop.Data;
-using static TARge25Shop.Core.Dto.KindergartenDto;
 
-namespace TARge25Shop.ApplicationServices.Services
+namespace TARge25_Shop.ApplicationServices.Services
 {
-    public class KindergartenServices
+    public class KindergartenServices : IKindergartenServices
     {
-        
+        public readonly TARge25ShopContext _context;
 
-            private readonly TARge25ShopContext _context;
-           
+        public KindergartenServices
+            (
+                TARge25ShopContext context
+            )
+        {
+            _context = context;
+        }
+        public async Task<Kindergarten> Create(KindergartenDto dto)
+        {
+            //Vaheinstants dto ja domain vahel
+            Kindergarten kindergarten = new Kindergarten();
 
-            public KindergartenServices
-                (
-                    TARge25ShopContext context
-                    
+            kindergarten.Id = Guid.NewGuid();
+            kindergarten.GroupName = dto.GroupName;
+            kindergarten.ChildrenCount = dto.ChildrenCount;
+            kindergarten.KindergartenName = dto.KindergartenName;
+            kindergarten.TeacherName = dto.TeacherName;
+            kindergarten.CreatedAt = DateTime.Now;
+            kindergarten.UpdatedAt = DateTime.Now;
 
-                )
+            //Testimiseks lisatud arvu kaitse
+            if (kindergarten.ChildrenCount < 0)
             {
-                _context = context;
-                
+                kindergarten.ChildrenCount = 0;
             }
 
-            //meetod tuleb controllerid esile kutsuda, st vaja liidestada
-
-            public async Task<Core.Domain.Kindergarten> Create(KindergartenDto dto)
-            {   //vaheinstants dto ja domain vahel, et andmed liiguks suunal
-                //dto-domain
-                Kindergarten kinderGarten = new();
-
-                kinderGarten.Id = Guid.NewGuid();
-                kinderGarten.GroupName = dto.GroupName;
-                kinderGarten.ChildrenCount = dto.ChildrenCount;
-                kinderGarten.KindergartenName = dto.KindergartenName;
-                kinderGarten.TeacherName = dto.TeacherName;
-                kinderGarten.CreatedAt = DateTime.Now;
-                kinderGarten.UpdatedAt = DateTime.Now;
-                //kui uus ankeet on loodud, siis toimub ka faili salvestamine
-                //saab kutsuda teise service classi meetodit
-                
-
-
-                //andmete salvestamine andmebaasi
-                _context.Kindergartens.Add(kinderGarten);
-                await _context.SaveChangesAsync();
-
-
-                return kinderGarten;
+            if (kindergarten.ChildrenCount > 30)
+            {
+                kindergarten.ChildrenCount = 30;
             }
 
-            //teha update meetod, mis võtab vastu dto ja uuendab olemasolevad kosmoselaeva
-            public async Task<Kindergarten> Update(KindergartenDto dto)
-            {   //vaheinstants dto ja domain vahel, et andmed liiguks suunal
-                //dto-domain
-                Kindergarten kinderGarten = new();
-
-                kinderGarten.Id = (Guid)dto.Id;
-                kinderGarten.GroupName = dto.GroupName;
-                kinderGarten.ChildrenCount = dto.ChildrenCount;
-                kinderGarten.KindergartenName = dto.KindergartenName;
-                kinderGarten.TeacherName = dto.TeacherName;
-                kinderGarten.CreatedAt = dto.CreatedAt;
-                kinderGarten.UpdatedAt = DateTime.Now;
-
-                //andmete uuendamine andmebaasis
-                _context.Kindergartens.Update(kinderGarten);
-                await _context.SaveChangesAsync();
-
-
-                return kinderGarten;
+            // Testimiseks lisatud, et väärtused mis on nõutud tagastaksid null, kui lahter on null.
+            if (string.IsNullOrWhiteSpace(kindergarten.GroupName) || string.IsNullOrWhiteSpace(kindergarten.KindergartenName) || string.IsNullOrWhiteSpace(kindergarten.TeacherName))
+            {
+                return null;
             }
 
-            //public async Task<Kindergarten> DetailAsync(Guid id)
-            //{
-            //    var kindergarten = await _context.Kindergartens
-            //        .FirstOrDefaultAsync(x => x.Id == id);
+            //Õpetaja nime pikkuse piirang kolm tähemärki
+            if (kindergarten.TeacherName.Length < 3)
+            {
+                return null;
+            }
 
-            //    return kindergarten;
+            //Andmete salvestamine andmebaasi
+            await _context.Kindergartens.AddAsync(kindergarten);
+            await _context.SaveChangesAsync();
 
-            //}
+            return kindergarten;
+        }
 
-            //public async Task<Kindergarten> Delete(Guid id)
-            //{
-            //    var result = await _context.Kindergartens
-            //        .FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<Kindergarten> Update(KindergartenDto dto)
+        {
+            Kindergarten kindergarten = new();
 
-            //    _context.Kindergartens.Remove(result);
-            //    await _context.SaveChangesAsync();
+            kindergarten.Id = dto.Id;
+            kindergarten.GroupName = dto.GroupName;
+            kindergarten.ChildrenCount = dto.ChildrenCount;
+            kindergarten.KindergartenName = dto.KindergartenName;
+            kindergarten.TeacherName = dto.TeacherName;
+            kindergarten.CreatedAt = (DateTime)dto.CreatedAt;
+            kindergarten.UpdatedAt = DateTime.Now;
 
-            //    return result;
-            //}
+            // Testimiseks lisatud, et väärtused mis on nõutud tagastaksid null, kui lahter on tühi.
+            if (string.IsNullOrWhiteSpace(kindergarten.GroupName) || string.IsNullOrWhiteSpace(kindergarten.KindergartenName) || string.IsNullOrWhiteSpace(kindergarten.TeacherName))
+            {
+                return null;
+            }
 
-        
+            //Testimiseks lisatud arvu kaitse
+            if (kindergarten.ChildrenCount < 0)
+            {
+                kindergarten.ChildrenCount = 0;
+            }
+
+            //Õpetaja nime pikkuse piirang kolm tähemärki
+            if (kindergarten.TeacherName.Length < 3)
+            {
+                return null;
+            }
+
+            //Andmete uuendamine andmebaasis
+            _context.ChangeTracker.Clear();
+            _context.Kindergartens.Update(kindergarten);
+            await _context.SaveChangesAsync();
+
+            return kindergarten;
+        }
+
+        //Meetod aitab vastuvõtta dto ja uuendab olemasolevat
+        public async Task<Kindergarten> DetailAsync(Guid id)
+        {
+            var kindergarten = await _context.Kindergartens
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            return kindergarten;
+        }
+
+        public async Task<Kindergarten> Delete(Guid id)
+        {
+            var result = await _context.Kindergartens
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            _context.Kindergartens.Remove(result);
+            await _context.SaveChangesAsync();
+
+            return result;
+        }
     }
 }
