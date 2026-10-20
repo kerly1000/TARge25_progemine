@@ -1,17 +1,251 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+using TARge25Shop.Core.Dto;
 using TARge25Shop.Core.ServiceInterface;
 using TARge25Shop.Data;
+using TARge25Shop.Models.Kindergarten;
+using TARge25Shop.Models.Kindergarten;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Net.WebRequestMethods;
 
 namespace TARge25Shop.Controllers
 {
     public class KindergartenController : Controller
     {
-        private readonly IKindergartenServices _kindergartenService;
+        private readonly IKindergartenServices _kinderGartenServices;
         private readonly TARge25ShopContext _context;
+        private readonly IFileServices _fileService;
+
+        public KindergartenController
+            (
+                IKindergartenServices kinderGartenServices,
+                TARge25ShopContext context,
+                IFileServices fileService
+            )
+        {
+            _kinderGartenServices = kinderGartenServices;
+            _context = context;
+            _fileService = fileService;
+        }
 
         public IActionResult Index()
         {
-            return View();
+            var result = _context.Kindergartens
+                .Select(x => new KindergartenIndexViewModel
+                {
+                    Id = x.Id,
+                    GroupName = x.GroupName,
+                    ChildrenCount = x.ChildrenCount,
+                    KindergartenName = x.KindergartenName,
+                    TeacherName = x.TeacherName,
+                    CreatedAt = x.CreatedAt
+                });
+
+            return View(result);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            KindergartenCreateUpdateViewModel result = new();
+
+            return View("CreateUpdate", result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(KindergartenCreateUpdateViewModel vm)
+        {
+            var dto = new KindergartenDto
+            {
+                GroupName = vm.GroupName,
+                ChildrenCount = vm.ChildrenCount,
+                KindergartenName = vm.KindergartenName,
+                TeacherName = vm.TeacherName,
+                Files = vm.Files,
+                Image = vm.Image
+                    .Select(x => new FileToDatabaseDto
+                    {
+                        Id = x.ImageId,
+                        ImageData = x.ImageData,
+                        ImageTitle = x.ImageTitle,
+                        KindergartenId = x.KindergartenId
+                    }).ToArray()
+            };
+
+            var result = await _kinderGartenServices.Create(dto);
+
+            if (result == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid id)
+        {
+            var kinderGarten = await _kinderGartenServices.DetailAsync(id);
+
+            if (kinderGarten == null)
+            {
+                return NotFound();
+            }
+
+            List<KindergartenImageViewModel> images = await FileFromDatabase(id);
+
+            var vm = new KindergartenCreateUpdateViewModel();
+
+            vm.Id = kinderGarten.Id;
+            vm.GroupName = kinderGarten.GroupName;
+            vm.ChildrenCount = kinderGarten.ChildrenCount;
+            vm.KindergartenName = kinderGarten.KindergartenName;
+            vm.TeacherName = kinderGarten.TeacherName;
+            vm.CreatedAt = kinderGarten.CreatedAt;
+            vm.UpdatedAt = kinderGarten.UpdatedAt;
+            vm.Image.AddRange(images);
+
+            return View("CreateUpdate", vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(KindergartenCreateUpdateViewModel vm)
+        {
+            var dto = new KindergartenDto
+            {
+                Id = vm.Id,
+                GroupName = vm.GroupName,
+                ChildrenCount = vm.ChildrenCount,
+                KindergartenName = vm.KindergartenName,
+                TeacherName = vm.TeacherName,
+                CreatedAt = vm.CreatedAt,
+                UpdatedAt = vm.UpdatedAt,
+                Files = vm.Files,
+                Image = vm.Image
+                    .Select(x => new FileToDatabaseDto
+                    {
+                        Id = x.ImageId,
+                        ImageData = x.ImageData,
+                        ImageTitle = x.ImageTitle,
+                        KindergartenId = x.KindergartenId
+                    }).ToArray()
+            };
+
+            var result = await _kinderGartenServices.Update(dto);
+
+            var kinderGartenId = result.Id;
+
+            if (result == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Details), new { id = kinderGartenId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var kinderGarten = await _kinderGartenServices.DetailAsync(id);
+
+            if (kinderGarten == null)
+            {
+                return NotFound();
+            }
+
+            List<KindergartenImageViewModel> images = await FileFromDatabase(id);
+
+            var vm = new KindergartenDeleteViewModel();
+
+            vm.Id = kinderGarten.Id;
+            vm.GroupName = kinderGarten.GroupName;
+            vm.ChildrenCount = kinderGarten.ChildrenCount;
+            vm.KindergartenName = kinderGarten.KindergartenName;
+            vm.TeacherName = kinderGarten.TeacherName;
+            vm.CreatedAt = kinderGarten.CreatedAt;
+            vm.UpdatedAt = kinderGarten.UpdatedAt;
+            vm.Image.AddRange(images);
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmation(Guid id)
+        {
+            var kinderGarten = await _kinderGartenServices.Delete(id);
+
+            if (kinderGarten == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var kinderGarten = await _kinderGartenServices.DetailAsync(id);
+
+            if (kinderGarten == null)
+            {
+                return NotFound();
+            }
+
+            List<KindergartenImageViewModel> images = await FileFromDatabase(id);
+
+            var vm = new KindergartenDetailViewModel();
+
+            vm.Id = kinderGarten.Id;
+            vm.GroupName = kinderGarten.GroupName;
+            vm.ChildrenCount = kinderGarten.ChildrenCount;
+            vm.KindergartenName = kinderGarten.KindergartenName;
+            vm.TeacherName = kinderGarten.TeacherName;
+            vm.CreatedAt = kinderGarten.CreatedAt;
+            vm.UpdatedAt = kinderGarten.UpdatedAt;
+            vm.Images.AddRange(images);
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveImage(KindergartenImageViewModel vm)
+        {
+            var dto = new FileToDatabaseDto()
+            {
+                Id = vm.ImageId
+            };
+
+            var image = await _fileService.RemoveImageFromDatabase(dto);
+
+            if (image == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            var kinderGartenId = image.KinderGartenId;
+            return RedirectToAction(nameof(Update), new { id = kinderGartenId });
+        }
+
+        public async Task<List<KindergartenImageViewModel>> FileFromDatabase(Guid id)
+        {
+            return await _context.FileToDatabases
+                .Where(x => x.KindergartenId == id)
+                .Select(y => new KindergartenImageViewModel
+                {
+                    ImageId = y.Id,
+                    ImageTitle = y.ImageTitle,
+                    ImageData = y.ImageData,
+                    KindergartenId = y.KinderGartenId,
+                    Image = string.Format("data:image/gif;base64,{0}",
+                        Convert.ToBase64String(y.ImageData))
+                }).ToListAsync();
         }
     }
+
+
+
+
 }
