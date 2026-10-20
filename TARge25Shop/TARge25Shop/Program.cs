@@ -20,6 +20,7 @@ namespace TARge25Shop
 
             builder.Services.AddHttpClient<IChuckNorrisServices, ChuckNorrisServices>();
             builder.Services.AddHttpClient<ICocktailServices, CocktailServices>();
+            builder.Services.AddHttpClient<IOpenWeatherServices, OpenWeatherServices>();
 
             //on vaja alla laadida Microsoft.EntityFrameworkCore.SqlServer NuGet pakett,
             //et kasutada UseSqlServer meetodit
