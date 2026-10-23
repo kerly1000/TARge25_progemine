@@ -1,0 +1,69 @@
+﻿@model TARge25Shop.Models.OpenWeather.OpenWeatherSearchViewModel
+
+@{
+    ViewData["Title"] = "Weather";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">☀️ Hetkeilm maailmas</h2>
+
+    <!-- Otsinguvorm -->
+    <form asp-controller="OpenWeather" asp-action="Search" method="get" class="row g-3 justify-content-center mb-5">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" name="cityName" class="form-control" placeholder="Sisesta linna nimi (nt Tallinn)..." value="@Model?.SearchCity" />
+                <button type="submit" class="btn btn-primary">Otsi</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Kui otsingutulemused on olemas -->
+    @if (Model?.Weathers != null && Model.Weathers.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var item in Model.Weathers)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">@item.Name</h3>
+                            
+                            @if (item.Weather != null && item.Weather.Any())
+                            {
+                                var weatherInfo = item.Weather.First();
+                                <div class="my-2">
+                                    @if (!string.IsNullOrEmpty(weatherInfo.Icon))
+                                    {
+                                        <img src=" https://openweathermap.org/payload/api/media/file/10d@2x.png
+
+                                        .png" alt="" />
+                                    }
+                                    <p class="text-capitalize text-muted">@weatherInfo.Description</p>
+                                </div>
+                            }
+
+                            @if (item.Main != null)
+                            {
+                                <h1 class="display-4 fw-bold my-3">@Math.Round(item.Main.Temp) °C</h1>
+                                <p class="mb-1">Tundub nagu: <strong>@Math.Round(item.Main.FeelsLike) °C</strong></p>
+                                <p class="mb-1">Õhuniiskus: <strong>@item.Main.Humidity %</strong></p>
+                                <p class="mb-1">Õhurõhk: <strong>@item.Main.Pressure hPa</strong></p>
+                            }
+
+                            @if (item.Wind != null)
+                            {
+                                <p class="text-muted mt-3 mb-0">Tuule kiirus: @item.Wind.Speed m/s</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(Model?.SearchCity))
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            Linna nimega <strong>@Model.SearchCity</strong> ei leitud või andmeid ei õnnestunud laadida.
+        </div>
+    }
+</div>

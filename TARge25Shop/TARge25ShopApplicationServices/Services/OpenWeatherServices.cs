@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Net.Http;
 using System.Text.Json;
+using System.Threading.Tasks;
 using TARge25Shop.Core.Dto;
+using TARge25Shop.Core.ServiceInterface;
 
 namespace TARge25Shop.ApplicationServices.Services
 {
-    public class OpenWeatherServices
+    public class OpenWeatherServices : IOpenWeatherServices
     {
         private readonly HttpClient _httpClient;
 
@@ -15,10 +17,12 @@ namespace TARge25Shop.ApplicationServices.Services
             _httpClient = httpClient;
         }
 
-        public async Task<OpenWeatherRootDto> OpenWeatherResultHttpClient()
+        public async Task<OpenWeatherDto> OpenWeatherResultHttpClient(string cityName)
         {
             var apiKey = "c55d132af5e1428b5112783558448031";
-            var url = $"https://api.openweathermap.org/data/2.5/weather?q={{city%20name}}&appid={{API%20key}}";
+
+            // Parandasime URL-i: kasutame õigeid muutujaid ja lisasime &units=metric (Celsiuse jaoks)
+            var url = $"https://api.openweathermap.org/data/2.5/weather?q={cityName}&appid={apiKey}&units=metric";
 
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -30,8 +34,7 @@ namespace TARge25Shop.ApplicationServices.Services
                 PropertyNameCaseInsensitive = true
             };
 
-            var weather = JsonSerializer.Deserialize<OpenWeatherRootDto>(
-                json, options);
+            var weather = JsonSerializer.Deserialize<OpenWeatherDto>(json, options);
 
             return weather!;
         }

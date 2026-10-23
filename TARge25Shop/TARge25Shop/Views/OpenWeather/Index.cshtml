@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Current Weather";
+}
+
+<h1>Current weather by city</h1>
+
+<form asp-controller="OpenWeather" asp-action="Search" method="get">
+    <div class="form-group">
+        <label for="cityName">City name</label>
+        <input type="text"
+               id="cityName"
+               name="cityName"
+               class="form-control"
+               placeholder="e.g. Tallinn, Tõravere"
+               required />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">
+        Search
+    </button>
+</form>

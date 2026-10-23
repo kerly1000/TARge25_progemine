@@ -12,7 +12,7 @@ namespace TARge25Shop.Core.Dto
         public CoordDto? Coord { get; set; }
 
         [JsonPropertyName("weather")]
-        public List<OpenWeatherDto>? Weather { get; set; }
+        public List<WeatherDto>? Weather { get; set; }
 
         [JsonPropertyName("base")]
         public string? Base { get; set; }

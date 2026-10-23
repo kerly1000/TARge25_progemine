@@ -7,6 +7,6 @@ namespace TARge25Shop.Core.ServiceInterface
 {
     public interface IOpenWeatherServices
     {
-        Task<OpenWeatherRootDto> OpenWeatherResultHttpClient();
+        Task<OpenWeatherDto> OpenWeatherResultHttpClient(string cityName);
     }
 }
