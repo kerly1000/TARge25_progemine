@@ -1,21 +1,21 @@
 ﻿@{
-    ViewData["Title"] = "Current Weather";
+    ViewData["Title"] = "Ilm Maailmas";
 }
+<div class="container mt-4 align-content-center">
+    <h2 class="mb-4 text-center"> <img src="images/weather.png" width="40" height="40" /> Hetkeilm maailmas</h2>
 
-<h1>Current weather by city</h1>
+    <form asp-controller="OpenWeather" asp-action="Search" method="get" class="row g-3 justify-content-center mb-5">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" id="cityName" name="cityName" class="form-control" placeholder="Sisesta siia linna nimi" />
+                <button type="submit" class="btn btn-primary">
+                    Otsi
+                </button>
+            
+            </div>           
 
-<form asp-controller="OpenWeather" asp-action="Search" method="get">
-    <div class="form-group">
-        <label for="cityName">City name</label>
-        <input type="text"
-               id="cityName"
-               name="cityName"
-               class="form-control"
-               placeholder="e.g. Tallinn, Tõravere"
-               required />
-    </div>
+        </div>
 
-    <button type="submit" class="btn btn-primary mt-2">
-        Search
-    </button>
-</form>
+        
+    </form>
+</div>

@@ -25,4 +25,8 @@
     <ProjectReference Include="..\TARge25ShopData\TARge25Shop.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\images\weather.png" />
+  </ItemGroup>
+
 </Project>
