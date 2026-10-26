@@ -1,19 +1,67 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
+using Xunit;
 
 namespace SeleniumTesting;
 
 public class KindergartenFrontendTest
 {
+
+    public static string thisRunGuid { get; set; }
+
     [Fact]
-    public void TestMethod1()
+    public void Should_NavigateToCreate_AddUniqueKindergarten_WithCorrectData_ReturnToIndex()
     {
+        // Ülesseade
+        IWebDriver driver = SetupAndNavigateKindergartenSIndex();
+
+        // Tegevus
+        IWebElement createInIndex = driver.FindElement(By.Id("CreateInIndex"));
+        createInIndex.Click();
+
+        // Sisestatavad andmed, tagastab unikaalse rühma nime (GUID)
+        string concreteGroupName = InsertKindergartenData_ReturnGroupName(driver, false);
+        thisRunGuid = concreteGroupName;
+
+        IWebElement cu_CreateKindergarten = driver.FindElement(By.Id("CU_CreateKindergarten"));
+        cu_CreateKindergarten.Click();
+
+        // Andmete kogumine pärast reloadi tabelist
+        var tableOfIndex = driver.FindElement(By.Id("IndexTable"));
+        List<IWebElement> rowsOfTable = tableOfIndex.FindElements(By.TagName("tr")).ToList();
+        rowsOfTable.RemoveAt(0); // Eemaldame päise (header row)
+
+        string kindergartenGroupNameData = "";
+        string kindergartenChildrenCountData = "";
+        string kindergartenKindergartenNameData = "";
+        bool doesItExist = false;
+
+        foreach (var row in rowsOfTable)
+        {
+            if (row.FindElement(By.Id("IndexGroupNameKindergarten")).Text == thisRunGuid)
+            {
+                doesItExist = true;
+                kindergartenGroupNameData = thisRunGuid;
+                kindergartenChildrenCountData = row.FindElement(By.Id("IndexChildrenCountKindergarten")).Text;
+                kindergartenKindergartenNameData = row.FindElement(By.Id("IndexKindergartenNameKindergarten")).Text;
+                break;
+            }
+        }
+        driver.Quit();
+
+        // Kontroll
+        Assert.True(doesItExist);
+        Assert.Equal(kindergartenGroupNameData, thisRunGuid);
+        Assert.Equal(kindergartenChildrenCountData, "2");
+        Assert.Equal("Nupsukesed", kindergartenKindergartenNameData);
     }
 
 
-    //ülesseade
 
-    private static IWebDriver SetupAndNavigateSIndex()
+
+    //andmed testimiseks
+
+    private static IWebDriver SetupAndNavigateKindergartenSIndex()
     {
         //firefoxi käskiv ja juhtiv draiver
         IWebDriver driver = new FirefoxDriver();
@@ -76,7 +124,7 @@ public class KindergartenFrontendTest
         }
     }
 
-    private string InsertSpaceShipData_ReturnName(IWebDriver driver, bool isOneOrTwo = false)
+    private string InsertKindergartenData_ReturnGroupName(IWebDriver driver, bool isOneOrTwo = false)
     {
         Guid returnGuid = Guid.NewGuid();
         if (isOneOrTwo)
