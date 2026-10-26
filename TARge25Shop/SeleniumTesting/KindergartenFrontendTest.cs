@@ -20,7 +20,7 @@ public class KindergartenFrontendTest
         //aadress millele draiver navigeerib
         driver.Url = "https://localhost:7227/";
         //lehelt otsitav element
-        IWebElement navigateToKindergarten = driver.FindElement(By.LinkText("Kindergarden"));
+        IWebElement navigateToKindergarten = driver.FindElement(By.LinkText("Kindergarten"));
         //selle elemendiga tehtav tegevus
         navigateToKindergarten.Click();
         return driver;
@@ -32,47 +32,47 @@ public class KindergartenFrontendTest
 
         if (isOneOrTwo)
         {
-            IWebElement cu_NameEntryKindergarten = driver.FindElement(By.Id("CU_NameEntrySpaceship"));
-            cu_NameEntrySpaceship.Clear();
+            IWebElement cu_KindergartenNameEntryKindergarten = driver.FindElement(By.Id("CU_KindergartenNameEntryKindergarten"));
+            cu_KindergartenNameEntryKindergarten.Clear();
             if (name != null)
             {
-                cu_NameEntrySpaceship.SendKeys(name);
+                cu_KindergartenNameEntryKindergarten.SendKeys(name);
             }
             else
             {
-                cu_NameEntrySpaceship.SendKeys("DISISENJUNAEM");
+                cu_KindergartenNameEntryKindergarten.SendKeys("Kasevits");
             }
-            IWebElement cu_ShipTypeEntrySpaceship = driver.FindElement(By.Id("CU_ShipTypeEntrySpaceship"));
-            cu_ShipTypeEntrySpaceship.Clear();
-            cu_ShipTypeEntrySpaceship.SendKeys("completely unheard of haunebu");
-            IWebElement cu_CrewEntrySpaceship = driver.FindElement(By.Id("CU_CrewEntrySpaceship"));
-            cu_CrewEntrySpaceship.Clear();
-            cu_CrewEntrySpaceship.SendKeys("67890");
-            IWebElement cu_EnginePowerEntrySpaceship = driver.FindElement(By.Id("CU_EnginePowerEntrySpaceship"));
-            cu_EnginePowerEntrySpaceship.Clear();
-            cu_EnginePowerEntrySpaceship.SendKeys("444");
+            IWebElement cu_GroupNameEntryKindergarten = driver.FindElement(By.Id("CU_GroupNameEntryKindergarten"));
+            cu_GroupNameEntryKindergarten.Clear();
+            cu_GroupNameEntryKindergarten.SendKeys("Tobukesed");
+            IWebElement cu_ChildrenCountEntryKindergarten = driver.FindElement(By.Id("CU_ChildrenCountEntryKindergarten"));
+            cu_ChildrenCountEntryKindergarten.Clear();
+            cu_ChildrenCountEntryKindergarten.SendKeys("3");
+            IWebElement cu_TeacherNameEntryKindergartengarten = driver.FindElement(By.Id("CU_TeacherNameEntryKindergarten"));
+            cu_TeacherNameEntryKindergartengarten.Clear();
+            cu_TeacherNameEntryKindergartengarten.SendKeys("Priiduk Pannal");
         }
         else
         {
-            IWebElement cu_NameEntrySpaceship = driver.FindElement(By.Id("CU_NameEntrySpaceship"));
-            cu_NameEntrySpaceship.Clear();
+            IWebElement cu_NameEntryKindergarten = driver.FindElement(By.Id("CU_NameEntryKindergarten"));
+            cu_NameEntryKindergarten.Clear();
             if (name != null)
             {
-                cu_NameEntrySpaceship.SendKeys(name);
+                cu_NameEntryKindergarten.SendKeys(name);
             }
             else
             {
-                cu_NameEntrySpaceship.SendKeys("i add name for spaceship");
+                cu_NameEntryKindergarten.SendKeys("Tammejuurikas");
             }
-            IWebElement cu_ShipTypeEntrySpaceship = driver.FindElement(By.Id("CU_ShipTypeEntrySpaceship"));
-            cu_ShipTypeEntrySpaceship.Clear();
-            cu_ShipTypeEntrySpaceship.SendKeys("i add ship type for spaceship");
-            IWebElement cu_CrewEntrySpaceship = driver.FindElement(By.Id("CU_CrewEntrySpaceship"));
-            cu_CrewEntrySpaceship.Clear();
-            cu_CrewEntrySpaceship.SendKeys("12345");
-            IWebElement cu_EnginePowerEntrySpaceship = driver.FindElement(By.Id("CU_EnginePowerEntrySpaceship"));
-            cu_EnginePowerEntrySpaceship.Clear();
-            cu_EnginePowerEntrySpaceship.SendKeys("666667");
+            IWebElement cu_GroupNameEntryKindergarten = driver.FindElement(By.Id("CU_GroupNameEntryKindergarten"));
+            cu_GroupNameEntryKindergarten.Clear();
+            cu_GroupNameEntryKindergarten.SendKeys("Otukesed");
+            IWebElement cu_ChildrenCountEntryKindergarten = driver.FindElement(By.Id("CU_ChildrenCountEntryKindergarten"));
+            cu_ChildrenCountEntryKindergarten.Clear();
+            cu_ChildrenCountEntryKindergarten.SendKeys("5");
+            IWebElement cu_TeacherNameEntryKindergartengarten = driver.FindElement(By.Id("CU_TeacherNameEntryKindergarten"));
+            cu_TeacherNameEntryKindergartengarten.Clear();
+            cu_TeacherNameEntryKindergartengarten.SendKeys("Rita Rihm");
         }
     }
 
@@ -81,33 +81,27 @@ public class KindergartenFrontendTest
         Guid returnGuid = Guid.NewGuid();
         if (isOneOrTwo)
         {
-            IWebElement cu_NameEntrySpaceship = driver.FindElement(By.Id("CU_NameEntrySpaceship"));
-            cu_NameEntrySpaceship.Clear();
-            cu_NameEntrySpaceship.SendKeys(returnGuid.ToString());
-            IWebElement cu_ShipTypeEntrySpaceship = driver.FindElement(By.Id("CU_ShipTypeEntrySpaceship"));
-            cu_ShipTypeEntrySpaceship.Clear();
-            cu_ShipTypeEntrySpaceship.SendKeys("completely unheard of haunebu");
-            IWebElement cu_CrewEntrySpaceship = driver.FindElement(By.Id("CU_CrewEntrySpaceship"));
-            cu_CrewEntrySpaceship.Clear();
-            cu_CrewEntrySpaceship.SendKeys("67890");
-            IWebElement cu_EnginePowerEntrySpaceship = driver.FindElement(By.Id("CU_EnginePowerEntrySpaceship"));
-            cu_EnginePowerEntrySpaceship.Clear();
-            cu_EnginePowerEntrySpaceship.SendKeys("444");
+            IWebElement cu_GroupNameEntryKindergarten = driver.FindElement(By.Id("CU_GroupNameEntryKindergarten"));
+            cu_GroupNameEntryKindergarten.Clear();
+            cu_GroupNameEntryKindergarten.SendKeys("Nupsukesed");
+            IWebElement cu_ChildrenCountEntryKindergarten = driver.FindElement(By.Id("CU_ChildrenCountEntryKindergarten"));
+            cu_ChildrenCountEntryKindergarten.Clear();
+            cu_ChildrenCountEntryKindergarten.SendKeys("2");
+            IWebElement cu_TeacherNameEntryKindergartengarten = driver.FindElement(By.Id("CU_TeacherNameEntryKindergarten"));
+            cu_TeacherNameEntryKindergartengarten.Clear();
+            cu_TeacherNameEntryKindergartengarten.SendKeys("Kalju Tugev");
         }
         else
         {
-            IWebElement cu_NameEntrySpaceship = driver.FindElement(By.Id("CU_NameEntrySpaceship"));
-            cu_NameEntrySpaceship.Clear();
-            cu_NameEntrySpaceship.SendKeys(returnGuid.ToString());
-            IWebElement cu_ShipTypeEntrySpaceship = driver.FindElement(By.Id("CU_ShipTypeEntrySpaceship"));
-            cu_ShipTypeEntrySpaceship.Clear();
-            cu_ShipTypeEntrySpaceship.SendKeys("i add ship type for spaceship");
-            IWebElement cu_CrewEntrySpaceship = driver.FindElement(By.Id("CU_CrewEntrySpaceship"));
-            cu_CrewEntrySpaceship.Clear();
-            cu_CrewEntrySpaceship.SendKeys("12345");
-            IWebElement cu_EnginePowerEntrySpaceship = driver.FindElement(By.Id("CU_EnginePowerEntrySpaceship"));
-            cu_EnginePowerEntrySpaceship.Clear();
-            cu_EnginePowerEntrySpaceship.SendKeys("666667");
+            IWebElement cu_GroupNameEntryKindergarten = driver.FindElement(By.Id("CU_GroupNameEntryKindergarten"));
+            cu_GroupNameEntryKindergarten.Clear();
+            cu_GroupNameEntryKindergarten.SendKeys("Tobukesed");
+            IWebElement cu_ChildrenCountEntryKindergarten = driver.FindElement(By.Id("CU_ChildrenCountEntryKindergarten"));
+            cu_ChildrenCountEntryKindergarten.Clear();
+            cu_ChildrenCountEntryKindergarten.SendKeys("3");
+            IWebElement cu_TeacherNameEntryKindergartengarten = driver.FindElement(By.Id("CU_TeacherNameEntryKindergarten"));
+            cu_TeacherNameEntryKindergartengarten.Clear();
+            cu_TeacherNameEntryKindergartengarten.SendKeys("Priiduk Pannal");
         }
         return returnGuid.ToString();
     }
