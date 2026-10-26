@@ -16,27 +16,28 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">Nr</th>
-                <th scope="col">Group Name</th>
-                <th scope="col">Children Count</th>
-                <th scope="col">Kindergarten Name</th>
-                <th scope="col">Teacher Name</th>
-                <th scope="col"></th>
+                <th id="IndexRowNumberColumn" scope="col">Nr</th>
+                <th id="IndexGroupNameColumn" scope="col">Group Name</th>
+                <th id="IndexChildrenCountColumn" scope="col">Children Count</th>
+                <th id="IndexKindergartenNameColumn" scope="col">Kindergarten Name</th>
+                <th id="IndexTeacherNameColumn" scope="col">Teacher Name</th>
+                <th id="IndexActionColumn" scope="col"></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var kinderGarten in Model)
             {
                 <tr>
-                    <td>@rowNumber</td>
-                    <td>@kinderGarten.GroupName</td>
-                    <td>@kinderGarten.ChildrenCount</td>
-                    <td>@kinderGarten.KindergartenName</td>
-                    <td>@kinderGarten.TeacherName</td>
-                    <td>
-                        <a asp-action="details" asp-controller="kinderGarten" asp-route-id="@kinderGarten.Id" class="btn btn-primary">Details</a>
-                        <a asp-action="update" asp-controller="kinderGarten" asp-route-id="@kinderGarten.Id" class="btn btn-primary">Update</a>
-                        <a asp-action="delete" asp-controller="kinderGarten" asp-route-id="@kinderGarten.Id" class="btn btn-outline-danger">Delete</a>
+                    <td id="IndexRowNumberKindergarten">@rowNumber</td>
+                    <td id="IndexGroupNameKindergarten">@kinderGarten.GroupName</td>
+                    <td id="IndexChildrenCountKindergarten">@kinderGarten.ChildrenCount</td>
+                    <td id="IndexKindergartenName">@kinderGarten.KindergartenName</td>
+                    <td id="IndexTeacherNameKindergarten">@kinderGarten.TeacherName</td>
+                    <td id="IndexActionKindergarten">
+                        <span id="IndexKindergartenId" hidden>@kinderGarten.Id</span>
+                        <a id="IndexKindergartenDetails" asp-action="details" asp-controller="kinderGarten" asp-route-id="@kinderGarten.Id" class="btn btn-primary">Details</a>
+                        <a id="IndexKindergartenUpdate" asp-action="update" asp-controller="kinderGarten" asp-route-id="@kinderGarten.Id" class="btn btn-primary">Update</a>
+                        <a id="IndexKindergartenDelete" asp-action="delete" asp-controller="kinderGarten" asp-route-id="@kinderGarten.Id" class="btn btn-outline-danger">Delete</a>
                     </td>
                 </tr>
                 rowNumber += 1;
