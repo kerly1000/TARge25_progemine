@@ -1,7 +1,5 @@
 <Solution>
-  <Project Path="SeleniumTesting/SeleniumTesting.csproj" Id="32537b7f-a273-4421-bf79-f694d721876b">
-    <Build Solution="Debug|*" Project="false" />
-  </Project>
+  <Project Path="SeleniumTesting/SeleniumTesting.csproj" Id="32537b7f-a273-4421-bf79-f694d721876b" />
   <Project Path="TARge25Shop.SpaceshipTest/TARge25Shop.SpaceshipTest.csproj">
     <Build Solution="Debug|*" Project="false" />
   </Project>

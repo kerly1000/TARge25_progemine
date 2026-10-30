@@ -320,7 +320,7 @@ namespace TARge25Shop.SeleniumTesting
             //firefoxi käskiv ja juhtiv draiver
             IWebDriver driver = new FirefoxDriver();
             //aadress millele draiver navigeerib
-            driver.Url = "https://localhost:7227/";
+            driver.Url = "https://localhost:7085/";
             //lehelt otsitav element
             IWebElement navigateToSpaceship = driver.FindElement(By.LinkText("Spaceship"));
             //selle elemendiga tehtav tegevus

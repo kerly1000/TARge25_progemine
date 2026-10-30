@@ -65,7 +65,7 @@ namespace TARge25_Shop.ApplicationServices.Services
         {
             Kindergarten kindergarten = new();
 
-            kindergarten.Id = dto.Id;
+            kindergarten.Id = (Guid)dto.Id;
             kindergarten.GroupName = dto.GroupName;
             kindergarten.ChildrenCount = dto.ChildrenCount;
             kindergarten.KindergartenName = dto.KindergartenName;
