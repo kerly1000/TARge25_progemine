@@ -230,6 +230,48 @@ namespace TARge25Shop.SeleniumTesting
             }
         }
 
+        [Fact]
+        [Order(7)]
+        //test kontrollib, et sisestatakse kirje ainult siis, kui laste arv oleks positiivne
+        public void Should_CreateKindergarten_OnlyWhenChildrenCountIsPositive()
+        {
+            IWebDriver driver = SetupAndNavigateIndex();
+
+            try
+            {
+                int rowsBefore = driver.FindElements(
+                    By.CssSelector("table tbody tr")).Count;
+
+                driver.FindElement(By.Id("IndexKindergartenCreate")).Click();
+
+                string groupName = $"Test Group {Guid.NewGuid()}";
+
+                InsertKindergartenData(
+                    driver,
+                    groupName,
+                    13,
+                    TestKindergartenName,
+                    TestTeacherName);
+
+                driver.FindElement(By.Id("CU_CreateKindergarten")).Click();
+
+                int rowsAfter = driver.FindElements(
+                    By.CssSelector("table tbody tr")).Count;
+
+                Assert.Equal(rowsBefore + 1, rowsAfter);
+
+                var createdRow = FindKindergartenRow(driver, groupName);
+
+                Assert.NotNull(createdRow);
+                Assert.Equal("13",
+                    createdRow!.FindElement(By.Id("IndexChildrenCountKindergarten")).Text);
+            }
+            finally
+            {
+                driver.Quit();
+            }
+        }
+
 
 
         private static IWebDriver SetupAndNavigateIndex()
