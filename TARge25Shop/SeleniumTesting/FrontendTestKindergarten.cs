@@ -161,6 +161,7 @@ namespace TARge25Shop.SeleniumTesting
 
         [Fact]
         [Order(5)]
+        //test kontrollib, et ei sisestata uut kirjet, kui rühna nimi on täitmata. 
         public void ShouldNot_CreateKindergartne_WhenGroupNameIsEmpty()
         {
             IWebDriver driver = SetupAndNavigateIndex();
@@ -188,6 +189,48 @@ namespace TARge25Shop.SeleniumTesting
             }
             finally { driver.Quit(); };
         }
+
+
+        [Fact]
+        [Order(6)]
+        //test kontrollib, et ei sisestata kirjet, kui "children count" väli ei ole täidetud
+        public void ShouldNot_CreateKindergarten_WhenChildrenCountIsEmpty()
+        {
+            IWebDriver driver = SetupAndNavigateIndex();
+            
+            try
+            {
+                int rowsBefore = driver.FindElements(
+                    By.CssSelector("table tbody tr")).Count;
+
+                driver.FindElement(By.Id("IndexKindergartenCreate")).Click();
+
+                driver.FindElement(By.Id("CU_GroupNameEntryKindergarten"))
+                    .SendKeys($"Test Group {Guid.NewGuid()}");
+
+                driver.FindElement(By.Id("CU_ChildrenCountEntryKindergarten"))
+                    .Clear();
+
+                driver.FindElement(By.Id("CU_KindergartenNameEntryKindergarten"))
+                    .SendKeys(TestKindergartenName);
+
+                driver.FindElement(By.Id("CU_TeacherNameEntryKindergarten"))
+                    .SendKeys(TestTeacherName);
+
+                driver.FindElement(By.Id("CU_CreateKindergarten")).Click();
+
+                int rowsAfter = driver.FindElements(
+                    By.CssSelector("table tbody tr")).Count;
+
+                Assert.Equal(rowsBefore, rowsAfter);
+            }
+            finally
+            {
+                driver.Quit();
+            }
+        }
+
+
 
         private static IWebDriver SetupAndNavigateIndex()
         {

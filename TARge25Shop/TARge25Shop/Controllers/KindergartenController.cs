@@ -56,6 +56,10 @@ namespace TARge25Shop.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(KindergartenCreateUpdateViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("CreateUpdate", vm);
+            }
             var dto = new KindergartenDto
             {
                 GroupName = vm.GroupName,
@@ -104,6 +108,10 @@ namespace TARge25Shop.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(KindergartenCreateUpdateViewModel vm)
         {
+            if(!ModelState.IsValid)
+            {
+                return View("CreateUpdate", vm);
+            }
             var dto = new KindergartenDto
             {
                 Id = vm.Id,

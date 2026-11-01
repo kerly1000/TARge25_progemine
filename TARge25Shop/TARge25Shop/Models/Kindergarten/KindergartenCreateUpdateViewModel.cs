@@ -1,4 +1,5 @@
-﻿using TARge25Shop.Models.Kindergarten;
+﻿using System.ComponentModel.DataAnnotations;
+using TARge25Shop.Models.Kindergarten;
 
 namespace TARge25Shop.Models.Kindergarten
 {
@@ -6,6 +7,7 @@ namespace TARge25Shop.Models.Kindergarten
     {
         public Guid? Id { get; set; }
         public string GroupName { get; set; } = string.Empty;
+        [Range(1, int.MaxValue, ErrorMessage = "Minimaalne laste arv rühmas 1")]
         public int ChildrenCount { get; set; }
         public string KindergartenName { get; set; } = string.Empty;
         public string TeacherName { get; set; } = string.Empty;
