@@ -159,6 +159,36 @@ namespace TARge25Shop.SeleniumTesting
             }
         }
 
+        [Fact]
+        [Order(5)]
+        public void ShouldNot_CreateKindergartne_WhenGroupNameIsEmpty()
+        {
+            IWebDriver driver = SetupAndNavigateIndex();
+
+            try
+            {
+                int rowsBefore = driver.FindElements(
+                    By.CssSelector("table tbody tr")).Count;
+
+                driver.FindElement(By.Id("IndexKindergartenCreate")).Click();
+
+                InsertKindergartenData(
+                   driver,
+                   "",
+                   20,
+                   TestKindergartenName,
+                   TestTeacherName);
+
+                driver.FindElement(By.Id("CU_CreateKindergarten")).Click();
+
+                int rowsAfter = driver.FindElements(
+                    By.CssSelector("table tbody tr")).Count;
+
+                Assert.Equal(rowsBefore, rowsAfter);
+            }
+            finally { driver.Quit(); };
+        }
+
         private static IWebDriver SetupAndNavigateIndex()
         {
             FirefoxOptions options = new FirefoxOptions();
