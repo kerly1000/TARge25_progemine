@@ -21,7 +21,7 @@ namespace TARge25Shop.SeleniumTesting
         private const string UpdatedTeacherName = "Updated Teacher";
 
         [Fact]
-        [Order(1)]
+        [Order(4)]
         public void Should_CreateKindergarten_WithCorrectData()
         {
             IWebDriver driver = SetupAndNavigateIndex();
@@ -58,7 +58,7 @@ namespace TARge25Shop.SeleniumTesting
         }
 
         [Fact]
-        [Order(2)]
+        [Order(5)]
         public void Should_ShowKindergartenDetails_WithCorrectData()
         {
             Assert.False(string.IsNullOrWhiteSpace(ThisRunGroupName),
@@ -93,7 +93,7 @@ namespace TARge25Shop.SeleniumTesting
         }
 
         [Fact]
-        [Order(3)]
+        [Order(6)]
         public void Should_UpdateKindergarten_WithNewData()
         {
             Assert.False(string.IsNullOrWhiteSpace(ThisRunGroupName),
@@ -135,8 +135,8 @@ namespace TARge25Shop.SeleniumTesting
         }
 
         [Fact]
-        [Order(4)]
-        public void Should_DeleteKindergarten()
+        [Order(8)]
+        public void Should_DeleteKindergarten_FromAppVIADeleteView()
         {
             Assert.False(string.IsNullOrWhiteSpace(ThisRunGroupName),
                 "Enne andmete kustutamist tuleb käivitada Create test.");
@@ -160,7 +160,7 @@ namespace TARge25Shop.SeleniumTesting
         }
 
         [Fact]
-        [Order(5)]
+        [Order(1)]
         //test kontrollib, et ei sisestata uut kirjet, kui rühna nimi on täitmata. 
         public void ShouldNot_CreateKindergartne_WhenGroupNameIsEmpty()
         {
@@ -192,7 +192,7 @@ namespace TARge25Shop.SeleniumTesting
 
 
         [Fact]
-        [Order(6)]
+        [Order(2)]
         //test kontrollib, et ei sisestata kirjet, kui "children count" väli ei ole täidetud
         public void ShouldNot_CreateKindergarten_WhenChildrenCountIsEmpty()
         {
@@ -231,7 +231,7 @@ namespace TARge25Shop.SeleniumTesting
         }
 
         [Fact]
-        [Order(7)]
+        [Order(3)]
         //test kontrollib, et sisestatakse kirje ainult siis, kui laste arv oleks positiivne
         public void Should_CreateKindergarten_OnlyWhenChildrenCountIsPositive()
         {
@@ -271,6 +271,64 @@ namespace TARge25Shop.SeleniumTesting
                 driver.Quit();
             }
         }
+
+
+        [Fact]
+        [Order(7)]
+        //test kontrollib, et update meetod ei luba uuendada andmeid, kui laste arvuks muudetakse 0
+        public void ShouldNot_UpdateKindergarten_WhenChildrenCountIsZero()
+        {
+            IWebDriver driver = SetupAndNavigateIndex();
+
+            try
+            {
+                string groupName = $"Update test {Guid.NewGuid()}";
+
+                driver.FindElement(By.Id("IndexKindergartenCreate")).Click();
+
+                InsertKindergartenData(
+                    driver,
+                    groupName,
+                    20,
+                    TestKindergartenName,
+                    TestTeacherName);
+
+                driver.FindElement(By.Id("CU_CreateKindergarten")).Click();
+
+                var existingRow = FindKindergartenRow(driver, groupName);
+                Assert.NotNull(existingRow);
+
+                existingRow!.FindElement(By.Id("IndexKindergartenUpdate")).Click();
+
+                var childrenCountInput = driver.FindElement(
+            By.Id("CU_ChildrenCountEntryKindergarten"));
+
+                childrenCountInput.Clear();
+                childrenCountInput.SendKeys("0");
+
+                driver.FindElement(By.Id("CU_UpdateKindergarten")).Click();
+
+                Assert.True(driver.Url.Contains("/update/"));
+
+                Assert.Equal("0",
+                    driver.FindElement(By.Id("CU_ChildrenCountEntryKindergarten"))
+                        .GetAttribute("value"));
+
+                driver.Navigate().GoToUrl("https://localhost:7085/Kindergarten");
+
+                var updatedRow = FindKindergartenRow(driver, groupName);
+
+                Assert.NotNull(updatedRow);
+
+                Assert.Equal("20",
+                    updatedRow!.FindElement(By.Id("IndexChildrenCountKindergarten")).Text);
+            }
+            finally
+            {
+                driver.Quit();
+            }
+        }
+
 
 
 
