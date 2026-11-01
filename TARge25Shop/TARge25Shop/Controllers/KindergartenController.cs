@@ -118,14 +118,13 @@ namespace TARge25Shop.Controllers
 
             var result = await _kinderGartenServices.Update(dto);
 
-            var kinderGartenId = result.Id;
-
+            
             if (result == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            return RedirectToAction(nameof(Details), new { id = kinderGartenId });
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]

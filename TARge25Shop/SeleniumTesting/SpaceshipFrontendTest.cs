@@ -24,34 +24,37 @@ namespace TARge25Shop.SeleniumTesting
     //järjestab nad vastavalt "Order" omadusele
     public class PriorityOrderer : ITestCaseOrderer
     {
-        //meetod võtab sisse kõik test cased
-        public IEnumerable<TTestCase> OrderTestCases<TTestCase>(IEnumerable<TTestCase> testCases)
+        public IEnumerable<TTestCase> OrderTestCases<TTestCase>(
+            IEnumerable<TTestCase> testCases)
             where TTestCase : ITestCase
         {
-            //meetod tagastab kõik test cased järjestatuna arendaja defineeritud järjesti järgi.
-            return testCases.OrderBy(test =>
+            Console.WriteLine("PRIORITY ORDERER KÄIVITUS");
+
+            var orderedTests = testCases.Select(test =>
             {
-                //leitakse omadus                                               omaduse tüüp
-                var method = test.TestMethod.Method.GetCustomAttributes(typeof(OrderAttribute)).FirstOrDefault();
-                //kui ei leita
-                if (method == null)
-                {
-                    //antakse maksimaalne väärtus, ehk test teostatakse kohe, ega ei
-                    //panda teiste pontensiaalselt järjekorras olevate testide vahele
-                    return int.MaxValue;
-                }
-                //kui leitakse
-                else
-                {
-                    //siis tagastatakse omaduse "Order" väärtus
-                    return method.GetNamedArgument<int>(nameof(OrderAttribute.Value));
-                }
-            }).ToList(); //pannakse loendisse, ToList on linq meetod.
+                var attribute = test.TestMethod.Method
+                    .GetCustomAttributes(typeof(OrderAttribute))
+                    .FirstOrDefault();
+
+                int order = attribute == null
+                    ? int.MaxValue
+                    : (int)attribute.GetConstructorArguments().First();
+
+                Console.WriteLine(
+                    $"TEST: {test.TestMethod.Method.Name}, ORDER: {order}");
+
+                return new { Test = test, Order = order };
+            })
+            .OrderBy(x => x.Order)
+            .Select(x => x.Test)
+            .ToList();
+
+            return orderedTests;
         }
     }
     //enne testi klassi kirjeldatakse ära mille järgi testid sorteeritakse
     //tunnuse "TestCaseOrderer"i järgi. Sulgude vahel esimene väärtus on klassi asukoht ise, teine väärtus on nimeruum kus klass asub.
-    [TestCaseOrderer("TARge25Shop.SeleniumTesting.PriorityOrderer", "TARge25Shop.SeleniumTesting")]
+    [TestCaseOrderer("TARge25Shop.SeleniumTesting.PriorityOrderer", "SeleniumTesting")]
     public class SpaceshipFrontendTests
     {
         public static string thisRunGuid { get; set; }

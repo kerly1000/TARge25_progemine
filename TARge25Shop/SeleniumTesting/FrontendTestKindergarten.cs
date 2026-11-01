@@ -1,13 +1,16 @@
+using OpenQA.Selenium;
+using OpenQA.Selenium.Firefox;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
 using Xunit;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace TARge25Shop.SeleniumTesting
 {
-    [TestCaseOrderer("TARge25Shop.SeleniumTesting.PriorityOrderer", "TARge25Shop.SeleniumTesting")]
+
+    [TestCaseOrderer("TARge25Shop.SeleniumTesting.PriorityOrderer", "SeleniumTesting")]
     public class KindergartenFrontendTest
     {
         public static string ThisRunGroupName { get; set; } = string.Empty;
@@ -41,7 +44,7 @@ namespace TARge25Shop.SeleniumTesting
                 Assert.NotNull(createdRow);
                 Assert.Equal(ThisRunGroupName,
                     createdRow!.FindElement(By.Id("IndexGroupNameKindergarten")).Text);
-                Assert.Equal("5",
+                Assert.Equal("20",
                     createdRow.FindElement(By.Id("IndexChildrenCountKindergarten")).Text);
                 Assert.Equal(TestKindergartenName,
                     createdRow.FindElement(By.Id("IndexKindergartenName")).Text);
@@ -72,13 +75,13 @@ namespace TARge25Shop.SeleniumTesting
 
                 string id = driver.FindElement(By.Id("Details_KindergartenId")).Text;
                 string groupName = driver.FindElement(By.Id("Details_KindergartenGroupName")).Text;
-                string childrenCount = driver.FindElement(By.Id("Details_KindergartenChildenCount")).Text;
+                string childrenCount = driver.FindElement(By.Id("Details_KindergartenChildrenCount")).Text;
                 string kindergartenName = driver.FindElement(By.Id("Details_KindergartenName")).Text;
                 string teacherName = driver.FindElement(By.Id("Details_KindergartenTeacherName")).Text;
 
                 Assert.False(string.IsNullOrWhiteSpace(id));
                 Assert.Equal(ThisRunGroupName, groupName);
-                Assert.Equal("5", childrenCount);
+                Assert.Equal("20", childrenCount);
                 Assert.Equal(TestKindergartenName, kindergartenName);
                 Assert.Equal(TestTeacherName, teacherName);
                 Assert.True(Guid.TryParse(id, out _));
@@ -158,11 +161,16 @@ namespace TARge25Shop.SeleniumTesting
 
         private static IWebDriver SetupAndNavigateIndex()
         {
-            IWebDriver driver = new FirefoxDriver();
+            FirefoxOptions options = new FirefoxOptions();
+
+            options.AcceptInsecureCertificates = true;
+
+            IWebDriver driver = new FirefoxDriver(options);
 
             try
             {
-                driver.Navigate().GoToUrl("https://localhost:7085/Kindergarten");
+                driver.Navigate().GoToUrl(
+                    "https://localhost:7085/Kindergarten");
 
                 return driver;
             }
