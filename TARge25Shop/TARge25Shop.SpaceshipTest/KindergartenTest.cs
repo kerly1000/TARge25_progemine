@@ -145,7 +145,17 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Null(result);
         }
 
-
+        [Fact] //10
+        public async Task ShouldNot_GetKindergartenById_WhenIdIsDeleted()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            var createdKindergarten = await Svc<IKindergartenServices>().Create(dto);
+                        
+            await Svc<IKindergartenServices>().Delete((Guid)createdKindergarten.Id);
+            var result = await Svc<IKindergartenServices>().DetailAsync((Guid)createdKindergarten.Id);
+                        
+            Assert.Null(result);
+        }
 
         //abimeetodid
         private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
