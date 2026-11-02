@@ -1,4 +1,5 @@
 ﻿
+using TARge25Shop.Core.Domain;
 using TARge25Shop.Core.Dto;
 using TARge25Shop.Core.ServiceInterface;
 using Xunit;
@@ -57,12 +58,17 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Equal(createdKindergarten1, kindergartenindb);
         }
 
-        [Fact] //4 
-
+        [Fact] //4 testime, et peale loomist tagastab sama id-ga lasteaia
         public async Task Should_GetKinergartenById_WhenGuidIsEqual()
         {
             KindergartenDto dto = MockKindergartenData();
+            var createdKindergarten = await Svc<IKindergartenServices>().Create(dto);
 
+            var result = await Svc<IKindergartenServices>().DetailAsync((Guid)createdKindergarten.Id);
+                        
+            Assert.NotNull(result);
+            Assert.Equal(createdKindergarten.Id, result.Id);
+            Assert.Equal(createdKindergarten.KindergartenName, result.KindergartenName);
         }
 
 
