@@ -122,17 +122,29 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Null(result);
         }
 
-        [Fact] //8 testime, et laste arv ei saa olla negatiivne
-        public async Task Should_SetChildrenCountToZero_WhenValueIsNegative()
+        [Fact] //8 testime, et kirjet ei looda, kui laste arv on negatiivne
+        public async Task ShouldNot_CreateKindergarten_WhenChildrenCountValueIsNegative()
         {            
             KindergartenDto dto = MockKindergartenData();
             dto.ChildrenCount = -5;
                         
             var result = await Svc<IKindergartenServices>().Create(dto);
                  
-            Assert.NotNull(result);
-            Assert.Equal(0, result.ChildrenCount);
+            Assert.Null(result);
+            
         }
+
+        [Fact] //9 testime, et kirjet ei looda, kui laste arv on liiga suur
+        public async Task ShouldNot_CreateKindergarten_WhenChildrenCountIsTooHigh()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            dto.ChildrenCount = 45;
+                        
+            var result = await Svc<IKindergartenServices>().Create(dto);
+                        
+            Assert.Null(result);
+        }
+
 
 
         //abimeetodid

@@ -32,17 +32,12 @@ namespace TARge25_Shop.ApplicationServices.Services
             kindergarten.UpdatedAt = DateTime.Now;
 
             //Testimiseks lisatud arvu kaitse
-            if (kindergarten.ChildrenCount < 0)
+            if (dto.ChildrenCount < 0 || dto.ChildrenCount > 30)
             {
-                kindergarten.ChildrenCount = 0;
+                return null;
             }
 
-            if (kindergarten.ChildrenCount > 30)
-            {
-                kindergarten.ChildrenCount = 30;
-            }
-
-            // Testimiseks lisatud, et väärtused mis on nõutud tagastaksid null, kui lahter on null.
+             // Testimiseks lisatud, et väärtused mis on nõutud tagastaksid null, kui lahter on null.
             if (string.IsNullOrWhiteSpace(kindergarten.GroupName) || string.IsNullOrWhiteSpace(kindergarten.KindergartenName) || string.IsNullOrWhiteSpace(kindergarten.TeacherName))
             {
                 return null;
@@ -80,9 +75,9 @@ namespace TARge25_Shop.ApplicationServices.Services
             }
 
             //Testimiseks lisatud arvu kaitse
-            if (kindergarten.ChildrenCount < 0)
+            if (dto.ChildrenCount < 0 || dto.ChildrenCount > 30)
             {
-                kindergarten.ChildrenCount = 0;
+                return null;
             }
 
             //Õpetaja nime pikkuse piirang kolm tähemärki
