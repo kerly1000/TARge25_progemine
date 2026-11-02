@@ -7,84 +7,90 @@ namespace TARge25Shop.SpaceshipTest
 {
     public class KindergartenTest : TestBase
     {
-        [Fact] //1
+        //1-11 spaceshipi järgi testid
+
+        [Fact] //1 testime create'i
         public async Task Should_AddKindergarten_WhenResultIsReturned()
         {
             // Ülesseade
             KindergartenDto dto = new KindergartenDto()
             {
-                GroupName = "munakesed",
-                ChildrenCount = 12,
-                KindergartenName = "tibukene",
-                TeacherName = "kana",
+                GroupName = "Test Groupname",
+                ChildrenCount = 20,
+                KindergartenName = "Test Kindergarten",
+                TeacherName = "Test Teacher",
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
             };
-
-            // tegutsemine
+                        
             var result = await Svc<IKindergartenServices>().Create(dto);
-
-            // kontroll
+                        
             Assert.NotNull(result);
         }
 
-        [Fact] //2
-        public async Task ShouldNot_GetSpaceshipByID_WhenGuidIsNotEqual()
+        [Fact] //2 testime, et ei tagastataks objekti, kui id != id
+        public async Task ShouldNot_GetKindergartenByID_WhenGuidIsNotEqual()
         {
-            // ülessezade
-            Guid databaseGuid = Guid.Parse("ecbc059a-0bca-4df2-aae9-a3211e69185a");
-            Guid seekGuid = Guid.Parse("ecbc059a-0bca-4df2-aae7-a3211e69185a");
+            KindergartenDto dto = MockKindergartenData();
+            var createdKindergarten = await Svc<IKindergartenServices>().Create(dto);
+            Guid wrongGuid = Guid.NewGuid();
 
-            // tegevus
-            await Svc<ISpaceshipServices>().DetailAsync(seekGuid);
+            var result = await Svc<IKindergartenServices>().DetailAsync(wrongGuid);
 
-            // kontroll
-            Assert.NotEqual(databaseGuid, seekGuid);
+            Assert.NotNull(createdKindergarten);
+            Assert.Null(result);
         }
 
-        [Fact]
-        public async Task ShouldNot_DeleteSpaceshipByID_WhenReturnedResultIsNotEqual()
+        [Fact] //3 testime, et ei kustuta lasteaeda, mille id != id
+        public async Task ShouldNot_DeleteKindergartenByID_WhenReturnedResultIsNotEqual()
         {
-            var dto = MockSpaceshipData();
-            var createdSpaceship1 = await Svc<ISpaceshipServices>().Create(dto);
-            var createdSpaceship2 = await Svc<ISpaceshipServices>().Create(dto);
-            var deleteResult = await Svc<ISpaceshipServices>().Delete((Guid)createdSpaceship2.Id);
-            var spaceshipindb = await Svc<ISpaceshipServices>().DetailAsync((Guid)createdSpaceship1.Id);
+            var dto = MockKindergartenData();
+            var createdKindergarten1 = await Svc<IKindergartenServices>().Create(dto);
+            var createdKindergarten2 = await Svc<IKindergartenServices>().Create(dto);
+            var deleteResult = await Svc<IKindergartenServices>().Delete((Guid)createdKindergarten2.Id);
+            var kindergartenindb = await Svc<IKindergartenServices>().DetailAsync((Guid)createdKindergarten1.Id);
 
             //kontroll
-            Assert.NotNull(spaceshipindb);
-            Assert.NotEqual(deleteResult.Id, createdSpaceship1.Id);
-            Assert.Equal(createdSpaceship1, spaceshipindb);
+            Assert.NotNull(deleteResult);
+            Assert.NotNull(kindergartenindb);
+            Assert.NotEqual(deleteResult.Id, createdKindergarten1.Id);
+            Assert.Equal(createdKindergarten1, kindergartenindb);
         }
 
+        [Fact] //4 
 
+        public async Task Should_GetKinergartenById_WhenGuidIsEqual()
+        {
+            KindergartenDto dto = MockKindergartenData();
+
+        }
 
 
         //abimeetodid
-        private SpaceshipDto MockSpaceshipData(bool isOneOrTwo = false)
+        private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
         {
             if (isOneOrTwo == false)
             {
-                return new SpaceshipDto
+                return new KindergartenDto
                 {
-                    Name = "X AE a L 12 menuornvöerv",
-                    ShipType = "lendav taldrik",
-                    Crew = 67,
-                    EnginePower = 69,//hobujõudu siis
+                    GroupName = "Test Groupname",
+                    ChildrenCount = 20,
+                    KindergartenName = "Test Kindergarten",
+                    TeacherName = "Test Teacher",
                     CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
                 };
             }
             else
             {
-                return new SpaceshipDto
+                return new KindergartenDto
                 {
-                    Name = "RAKETT69",
-                    ShipType = "lendav kauss",
-                    Crew = 420,
-                    EnginePower = 999,//hobujõudu siis
+                    GroupName = "Groupname Test",
+                    ChildrenCount = 20,
+                    KindergartenName = "Kindergarten Test",
+                    TeacherName = "Teacher Test",
                     CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
                 };
             }
         }

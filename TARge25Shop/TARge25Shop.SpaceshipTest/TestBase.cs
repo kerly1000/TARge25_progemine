@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TARge25_Shop.ApplicationServices.Services;
 using TARge25Shop.ApplicationServices.Services;
 using TARge25Shop.Core.ServiceInterface;
 using TARge25Shop.Data;
@@ -32,7 +33,7 @@ namespace TARge25Shop.SpaceshipTest
         public virtual void SetupServices(ServiceCollection services)
         {
             services.AddScoped<ISpaceshipServices, SpaceshipServices>();
-            services.AddScoped<IKindergartenServices, IKindergartenServices>();
+            services.AddScoped<IKindergartenServices, KindergartenServices>();
             services.AddScoped<IFileServices, FileServices>();
             services.AddScoped<IHostEnvironment, MockIHostEnvironment>();
 
