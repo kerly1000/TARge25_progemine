@@ -71,6 +71,43 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Equal(createdKindergarten.KindergartenName, result.KindergartenName);
         }
 
+        [Fact] //5 testime, et kustutatakse lasteaed, mille id-ga kustutamist küsime
+
+        public async Task Should_DeleteKindergartenById_WhenReturnedResultIsEqual()
+        {
+            KindergartenDto dto = MockKindergartenData();
+            var createdKindergarten = await Svc<IKindergartenServices>().Create(dto);
+
+            var deleteResult = await Svc<IKindergartenServices>().Delete((Guid)createdKindergarten.Id);
+
+            Assert.NotNull(deleteResult);
+            Assert.Equal(createdKindergarten.Id, deleteResult.Id);
+        }
+
+        [Fact] //6 testime, kas update korral muudatused salvestati samale id-le
+
+        public async Task Should_UpdateKindergarten_WhenResultIsReturned()
+        {
+            KindergartenDto dto = MockKindergartenData();
+            var createdKindergarten = await Svc<IKindergartenServices>().Create(dto);
+
+            dto.Id = createdKindergarten.Id;
+            dto.GroupName = "Updated Groupname";
+            dto.KindergartenName = "Updated Kindergarten";
+            dto.TeacherName = "Updated Teacher";
+            dto.ChildrenCount = 15;
+                        
+            var updatedKindergarten = await Svc<IKindergartenServices>().Update(dto);
+                        
+            Assert.NotNull(updatedKindergarten);
+            Assert.Equal("Updated Groupname", updatedKindergarten.GroupName);
+            Assert.Equal("Updated Kindergarten", updatedKindergarten.KindergartenName);
+            Assert.Equal("Updated Teacher", updatedKindergarten.TeacherName);
+            Assert.Equal(15, updatedKindergarten.ChildrenCount);
+            Assert.Equal(createdKindergarten.Id, updatedKindergarten.Id);
+        }
+
+
 
         //abimeetodid
         private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
