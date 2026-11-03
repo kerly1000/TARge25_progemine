@@ -221,6 +221,32 @@ namespace TARge25Shop.SpaceshipTest
                         
             Assert.Null(result);
         }
+
+        [Fact] //16 testime, et piirväärtuse maksimum võetakse vastu ja luuakse kirje
+        public async Task Should_CreateKindergarten_WhenChildrenCountIsThirty()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            dto.ChildrenCount = 30;
+                        
+            var result = await Svc<IKindergartenServices>().Create(dto);
+                        
+            Assert.NotNull(result);
+            Assert.Equal(30, result.ChildrenCount);
+        }
+
+        [Fact] //17 testime, et miinimumväärtus 0 võetakse vastu ja luuakse kirje
+        public async Task Should_CreateKindergarten_WhenChildrenCountIsZero()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            dto.ChildrenCount = 0;
+                        
+            var result = await Svc<IKindergartenServices>().Create(dto);
+                        
+            Assert.NotNull(result);
+            Assert.Equal(0, result.ChildrenCount);
+        }
+
+
         //abimeetodid
         private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
         {
