@@ -145,7 +145,7 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Null(result);
         }
 
-        [Fact] //10
+        [Fact] //10 testime, et ei tahastaks kustutatud lasteaeda
         public async Task ShouldNot_GetKindergartenById_WhenIdIsDeleted()
         {            
             KindergartenDto dto = MockKindergartenData();
@@ -157,6 +157,25 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Null(result);
         }
 
+        [Fact] //11 testime, et update korral ei muutu created at andmed
+        public async Task Should_KeepCreatedAtAndChangeUpdatedAt_WhenKindergartenIsUpdated()
+        {
+            KindergartenDto dto = MockKindergartenData();
+            var createdKindergarten = await Svc<IKindergartenServices>().Create(dto);
+
+            DateTime originalCreatedAt = createdKindergarten.CreatedAt;
+
+            dto.Id = createdKindergarten.Id;
+            dto.GroupName = "Updated Group";
+                        
+            var updatedKindergarten = await Svc<IKindergartenServices>().Update(dto);
+                        
+            Assert.NotNull(updatedKindergarten);
+            Assert.Equal(originalCreatedAt, updatedKindergarten.CreatedAt);
+            Assert.True(updatedKindergarten.UpdatedAt >= createdKindergarten.UpdatedAt);
+        }
+
+        [F]
         //abimeetodid
         private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
         {
