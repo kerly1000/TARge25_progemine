@@ -107,7 +107,7 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Equal(createdKindergarten.Id, updatedKindergarten.Id);
         }
 
-        [Fact] //7 testime, et õpetaja nimi ei oleks lühem kui 3 tähte
+        [Fact] //7 testime, et õpetaja nimi ei oleks update korral lühem kui 3 tähte
         public async Task ShouldNot_UpdateKindergarten_WhenTeacherNameIsTooShort()
         {            
             KindergartenDto dto = MockKindergartenData();
@@ -251,6 +251,17 @@ namespace TARge25Shop.SpaceshipTest
         {            
             KindergartenDto dto = MockKindergartenData();
             dto.GroupName = "   ";
+                        
+            var result = await Svc<IKindergartenServices>().Create(dto);
+                        
+            Assert.Null(result);
+        }
+
+        [Fact] //19 testime, et uue lasteaeda ei looda, kui õpetaja nimi on liiga lühike
+        public async Task ShouldNot_CreateKindergarten_WhenTeacherNameIsTooShort()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            dto.TeacherName = "AB";
                         
             var result = await Svc<IKindergartenServices>().Create(dto);
                         
