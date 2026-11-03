@@ -280,6 +280,38 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Equal("Ene", result.TeacherName);
         }
 
+        [Fact] //21 testime, et nime update korral ei muutuks laste arv
+        public async Task Should_KeepChildrenCount_WhenKindergartenIsUpdated()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            var createdKindergarten = await Svc<IKindergartenServices>().Create(dto);
+
+            dto.Id = createdKindergarten.Id;
+            int originalChildrenCount = createdKindergarten.ChildrenCount;
+            dto.GroupName = "Updated Group";
+                        
+            var result = await Svc<IKindergartenServices>().Update(dto);
+                        
+            Assert.NotNull(result);
+            Assert.Equal(originalChildrenCount, result.ChildrenCount);
+            Assert.Equal("Updated Group", result.GroupName);
+        }
+
+        [Fact] //22 testime, et ei uuendata lasteaeda, kui rühma nime väli on tühi
+        public async Task ShouldNot_UpdateKindergarten_WhenGroupNameIsEmpty()
+        {
+            KindergartenDto dto = MockKindergartenData();
+            var createdKindergarten = await Svc<IKindergartenServices>().Create(dto);
+
+            dto.Id = createdKindergarten.Id;
+            dto.GroupName = "";
+                        
+            var result = await Svc<IKindergartenServices>().Update(dto);
+                        
+            Assert.NotNull(createdKindergarten);
+            Assert.Null(result);
+        }
+
         //abimeetodid
         private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
         {
