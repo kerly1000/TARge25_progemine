@@ -342,7 +342,35 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Null(result);
         }
 
+        [Fact] //25 testime, et ei uuenda lasteaaeda, kui laste arv on negatiivne
+        public async Task ShouldNot_UpdateKindergarten_WhenChildrenCountIsNegative()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            var createdKindergarten = await Svc<IKindergartenServices>().Create(dto);
 
+            dto.Id = createdKindergarten.Id;
+            dto.ChildrenCount = -5;
+                        
+            var result = await Svc<IKindergartenServices>().Update(dto);
+                        
+            Assert.NotNull(createdKindergarten);
+            Assert.Null(result);
+        }
+
+        [Fact] //26 testime, et ei uuendata lasteaeda, kui laste arv ületab maksimaalse piirmäära
+        public async Task ShouldNot_UpdateKindergarten_WhenChildrenCountIsTooHigh()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            var createdKindergarten = await Svc<IKindergartenServices>().Create(dto);
+
+            dto.Id = createdKindergarten.Id;
+            dto.ChildrenCount = 31;
+                        
+            var result = await Svc<IKindergartenServices>().Update(dto);
+                        
+            Assert.NotNull(createdKindergarten);
+            Assert.Null(result);
+        }
 
         //abimeetodid
         private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
