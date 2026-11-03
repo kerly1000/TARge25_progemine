@@ -200,6 +200,17 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Null(result);
         }
 
+        [Fact] //14 testime, et ei loodaks uut kirjet, kui lasteaia nime väli on tühi
+        public async Task ShouldNot_CreateKindergarten_WhenKindergartenNameIsEmpty()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            dto.KindergartenName = "";
+                        
+            var result = await Svc<IKindergartenServices>().Create(dto);
+                        
+            Assert.Null(result);
+        }
+
         //abimeetodid
         private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
         {
