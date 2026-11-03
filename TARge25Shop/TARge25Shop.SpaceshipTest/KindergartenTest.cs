@@ -246,6 +246,16 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Equal(0, result.ChildrenCount);
         }
 
+        [Fact] //18 testime, et kirjet ei looda, kui nimi sisaldab ainult tühikuid
+        public async Task ShouldNot_CreateKindergarten_WhenGroupNameContainsOnlySpaces()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            dto.GroupName = "   ";
+                        
+            var result = await Svc<IKindergartenServices>().Create(dto);
+                        
+            Assert.Null(result);
+        }
 
         //abimeetodid
         private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
