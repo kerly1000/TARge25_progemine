@@ -312,7 +312,7 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Null(result);
         }
 
-        [Fact] //23 testime, et ei uuendata lasteaeda, kui asteaia nime väli on tühi
+        [Fact] //23 testime, et ei uuendata lasteaeda, kui lasteaia nime väli on tühi
         public async Task ShouldNot_UpdateKindergarten_WhenKindergartenNameIsEmpty()
         {            
             KindergartenDto dto = MockKindergartenData();
@@ -326,6 +326,23 @@ namespace TARge25Shop.SpaceshipTest
             Assert.NotNull(createdKindergarten);
             Assert.Null(result);
         }
+
+        [Fact] //24 testime, et ei uuendata lasteaeda, kui õpetaja nime väli on tühi
+        public async Task ShouldNot_UpdateKindergarten_WhenTeacherNameIsEmpty()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            var createdKindergarten = await Svc<IKindergartenServices>().Create(dto);
+
+            dto.Id = createdKindergarten.Id;
+            dto.TeacherName = "";
+                        
+            var result = await Svc<IKindergartenServices>().Update(dto);
+                        
+            Assert.NotNull(createdKindergarten);
+            Assert.Null(result);
+        }
+
+
 
         //abimeetodid
         private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
