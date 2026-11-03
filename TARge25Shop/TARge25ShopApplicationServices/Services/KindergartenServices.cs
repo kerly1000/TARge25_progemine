@@ -58,14 +58,18 @@ namespace TARge25_Shop.ApplicationServices.Services
 
         public async Task<Kindergarten> Update(KindergartenDto dto)
         {
-            Kindergarten kindergarten = new();
+            var kindergarten = await _context.Kindergartens
+                .FirstOrDefaultAsync(x => x.Id == dto.Id);
 
-            kindergarten.Id = (Guid)dto.Id;
+            if (kindergarten == null)
+            {
+                return null;
+            }
+                        
             kindergarten.GroupName = dto.GroupName;
             kindergarten.ChildrenCount = dto.ChildrenCount;
             kindergarten.KindergartenName = dto.KindergartenName;
             kindergarten.TeacherName = dto.TeacherName;
-            kindergarten.CreatedAt = (DateTime)dto.CreatedAt;
             kindergarten.UpdatedAt = DateTime.Now;
 
             // Testimiseks lisatud, et väärtused mis on nõutud tagastaksid null, kui lahter on tühi.
@@ -87,8 +91,6 @@ namespace TARge25_Shop.ApplicationServices.Services
             }
 
             //Andmete uuendamine andmebaasis
-            _context.ChangeTracker.Clear();
-            _context.Kindergartens.Update(kindergarten);
             await _context.SaveChangesAsync();
 
             return kindergarten;

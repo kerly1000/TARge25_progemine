@@ -175,7 +175,31 @@ namespace TARge25Shop.SpaceshipTest
             Assert.True(updatedKindergarten.UpdatedAt >= createdKindergarten.UpdatedAt);
         }
 
-        [F]
+        [Fact] //12 testime, kas kõik andmed salvestatakse kirje loomisel korrektselt
+        public async Task Should_SaveAllKindergartenData_WhenCreated()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+                        
+            var result = await Svc<IKindergartenServices>().Create(dto);
+                        
+            Assert.NotNull(result);
+            Assert.Equal(dto.GroupName, result.GroupName);
+            Assert.Equal(dto.ChildrenCount, result.ChildrenCount);
+            Assert.Equal(dto.KindergartenName, result.KindergartenName);
+            Assert.Equal(dto.TeacherName, result.TeacherName);
+        }
+
+        [Fact] //13 testime, et ei loodaks uut kirjet, kui rühma nime väli on tühi
+        public async Task ShouldNot_CreateKindergarten_WhenGroupNameIsEmpty()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            dto.GroupName = "";
+                        
+            var result = await Svc<IKindergartenServices>().Create(dto);
+                        
+            Assert.Null(result);
+        }
+
         //abimeetodid
         private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
         {
