@@ -268,6 +268,18 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Null(result);
         }
 
+        [Fact] //20 testime, et miinimumväärtusega õpetaja nime korral luuakse uus kirje
+        public async Task Should_CreateKindergarten_WhenTeacherNameHasThreeCharacters()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            dto.TeacherName = "Ene";
+                        
+            var result = await Svc<IKindergartenServices>().Create(dto);
+                        
+            Assert.NotNull(result);
+            Assert.Equal("Ene", result.TeacherName);
+        }
+
         //abimeetodid
         private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
         {
