@@ -211,6 +211,16 @@ namespace TARge25Shop.SpaceshipTest
             Assert.Null(result);
         }
 
+        [Fact] //15 testime, et ei loodaks uut kirjet, kui õpetaja nime väli on tühi
+        public async Task ShouldNot_CreateKindergarten_WhenTeacherNameIsEmpty()
+        {            
+            KindergartenDto dto = MockKindergartenData();
+            dto.TeacherName = "";
+                        
+            var result = await Svc<IKindergartenServices>().Create(dto);
+                        
+            Assert.Null(result);
+        }
         //abimeetodid
         private KindergartenDto MockKindergartenData(bool isOneOrTwo = false)
         {
