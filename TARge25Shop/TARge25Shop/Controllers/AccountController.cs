@@ -5,7 +5,8 @@ using TARge25Shop.Core.ServiceInterface;
 using TARge25Shop.Core.Domain;
 using TARge25Shop.Models.Account;
 using TARge25Shop.Core.Dto;
-
+using System.Diagnostics;
+using TARge25Shop.Models;
 
 namespace TARge25Shop.Controllers
 {
@@ -123,8 +124,76 @@ namespace TARge25Shop.Controllers
                 "CreatedAccountData", $"{user.Email}\n{user.City}\n[password hidden]"
                 ];
 
-            return null;
+            if (result.Succeeded)
+            {
+                errordatas =
+                    
+                      [
+                        "Area", "Account",
+                        "Issue", "Success",
+                        "StatusMessage", "Registration Success",
+                        "ActedOn", $"{user.Email}",
+                        "CreatedAccountData", $"{user.Email}\n{user.City}\n[password hidden]"
+                        ];
+                ViewBag.ErrorMessage = errordatas;
+                return View();
+                    
+            }
+
+            ViewBag.Error = errordatas;
+            ViewBag.ErrorTitles = "Email cannot be confiirmed";
+            ViewBag.ErrorMessage = $"The user email, with userid of {userId}, cannot be confirmed";
+            return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
                 
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+
+        public async Task<IActionResult> Login(string? returnUrl)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                //otsib sinu emaili DB-st üles
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user != null && !user.EmailConfirmed &&
+                    (await _userManager.CheckPasswordAsync(user, model.Password)))
+                {
+                    ModelState.AddModelError(string.Empty, "Email not confirmed yet");
+                    return View(model);
+                }
+
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, true)
+                
+                if(result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+
+                if (result.IsLockedOut)
+                {
+                    return View("AccountLocked");
+                }
+
+                ModelState.AddModelError("", "Invalid login Attempt");
+
+            }
+            return View(model);
         }
     }
 }
