@@ -30,7 +30,22 @@ namespace TARge25Shop
             builder.Services.AddDbContext<TARge25ShopContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+
+                options.Password.RequiredLength = 3;          
+                options.Password.RequireDigit = false;        
+                options.Password.RequireLowercase = false;    
+                options.Password.RequireUppercase = false;    
+                options.Password.RequireNonAlphanumeric = false;
+
+                options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
+
+                options.Lockout.MaxFailedAccessAttempts = 3;  
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); 
+                options.Lockout.AllowedForNewUsers = true;
+            })
                 .AddEntityFrameworkStores<TARge25ShopContext>()
                 .AddDefaultTokenProviders();
 

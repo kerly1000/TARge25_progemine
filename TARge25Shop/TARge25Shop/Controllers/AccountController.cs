@@ -171,7 +171,7 @@ namespace TARge25Shop.Controllers
                     return View(model);
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, true)
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, true);
                 
                 if(result.Succeeded)
                 {
@@ -195,5 +195,52 @@ namespace TARge25Shop.Controllers
             }
             return View(model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null && await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    //muutuja token tuleb uus genereerida
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    //muutuja passwordResetLink, mis viib ResetPassword vaatele
+                    var passwordResetLink = Url.Action("ResetPassword", "Account", new { email = model.Email, token = token }, Request.Scheme);
+
+                    //saadame emaili
+                    var emailDto = new EmailDto
+                    {
+                        //emiali sisu
+                        To = model.Email,
+                        //subject
+                        Subject = "Reset your password",
+                        //body, mille sees on passwordrestlink
+                        Body = $"Please reset your password by clicking <a href=`{passwordResetLink}`>here</a>"
+
+
+
+                    };
+                    _emailServices.SendEmail(emailDto);
+
+                    return View("ForgotPasswordConfirmation");
+
+
+                }
+                return View("ForgotPasswordConfirmation");
+            }
+            return View(model);
+        }
+
+
     }
 }
